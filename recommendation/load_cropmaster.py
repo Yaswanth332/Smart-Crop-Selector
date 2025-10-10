@@ -1,21 +1,45 @@
 # recommendation/load_cropmaster.py
 
 import os
+import shutil
 from django.conf import settings
+from django.core.files import File
 from .models import CropMaster
 import csv
 
 def run():
+    """
+    Load crop data and move images from static to media folder.
+    Source: recommendation/static/images/
+    Destination: media/crop_images/
+    """
     CropMaster.objects.all().delete()
+    
+    csv_path = os.path.join(settings.BASE_DIR, 'recommendation', 'data', 'crop_data.csv')
+    source_images = os.path.join(settings.BASE_DIR, 'recommendation', 'static', 'images')
+    media_crop_images = os.path.join(settings.MEDIA_ROOT, 'crop_images')
+    
+    # Create media directory if it doesn't exist
+    os.makedirs(media_crop_images, exist_ok=True)
 
-    with open('recommendation/data/crop_data.csv', newline='', encoding='utf-8') as csvfile:
+    with open(csv_path, newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            crop_name = row['name'].strip().lower().replace(" ", "_")
-            image_path = os.path.join(settings.MEDIA_ROOT, 'crop_images', f'{crop_name}.jpg')
-
-            # Use image only if file exists
-            image_field = f'crop_images/{crop_name}.jpg' if os.path.exists(image_path) else None
+            crop_name_normalized = row['name'].strip().lower().replace(" ", "_").replace("(", "").replace(")", "")
+            image_filename = f'{crop_name_normalized}.jpg'
+            
+            source_image_path = os.path.join(source_images, image_filename)
+            dest_image_path = os.path.join(media_crop_images, image_filename)
+            
+            image_field_value = None
+            
+            if os.path.exists(source_image_path):
+                # Copy image to media folder
+                shutil.copy2(source_image_path, dest_image_path)
+                image_field_value = f'crop_images/{image_filename}'
+                print(f"✓ Copied {image_filename} to media folder")
+            else:
+                print(f"⚠️  Image not found: {image_filename}")
 
             CropMaster.objects.create(
                 name=row['name'],
@@ -31,5 +55,7 @@ def run():
                 temperature_max=row['temperature_max'],
                 season=row['season'],
                 previous_crop=row.get('previous_crop', ''),
-                image=image_field  # only set if image exists
+                image=image_field_value
             )
+    
+    print(f"\n✅ Loaded {CropMaster.objects.count()} crops!")
