@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'recommendation',
     'crispy_forms',
     'crispy_bootstrap5',
+    'tailwind',
 ]
+TAILWIND_APP_NAME = 'theme'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"

@@ -1,0 +1,656 @@
+{% extends 'recommendation/base.html' %}
+
+{% block title %}Modern Smart Crop Advisor | AI-Powered Farming Recommendations{% endblock %}
+
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary: #2e7d32;
+        --primary-light: #4caf50;
+        --primary-dark: #1b5e20;
+        --secondary: #ff9800;
+        --accent: #2196f3;
+        --text-dark: #263238;
+        --text-light: #607d8b;
+        --bg-light: #f5f7fa;
+        --bg-dark: #121212;
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --card-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: var(--bg-light);
+        color: var(--text-dark);
+        background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2670&auto=format&fit=crop');
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+    }
+    
+    [data-bs-theme="dark"] body {
+        background-color: var(--bg-dark);
+        color: #e0e0e0;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+    }
+
+    .main-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: none;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    [data-bs-theme="dark"] .main-card {
+        background: rgba(30, 30, 30, 0.85);
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        color: white;
+        padding: 2rem;
+    }
+    
+    .header-content {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    
+    .header-icon {
+        font-size: 3rem;
+        background: rgba(255,255,255,0.1);
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    
+    .card-body {
+        padding: 2rem;
+    }
+
+    /* Progress Steps */
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+    .progress-steps::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #e0e0e0;
+        z-index: 1;
+    }
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+    .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    .step.active .step-number {
+        background: var(--primary);
+        color: white;
+    }
+    .step-text {
+        font-size: 0.875rem;
+        color: #666;
+        transition: color 0.3s ease;
+    }
+    .step.active .step-text {
+        color: var(--primary);
+        font-weight: 600;
+    }
+    [data-bs-theme="dark"] .step-text { color: #ccc; }
+    [data-bs-theme="dark"] .step.active .step-text { color: var(--primary-light); }
+
+
+    /* Form Sections */
+    .form-sections {
+        position: relative;
+        min-height: 350px;
+    }
+    .form-section {
+        display: none;
+        animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .form-section.active {
+        display: block;
+    }
+    .section-header {
+        margin-bottom: 2rem;
+    }
+    .section-subtitle {
+        color: var(--text-light);
+    }
+    [data-bs-theme="dark"] .section-subtitle { color: #bbb; }
+    
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+    
+    /* Form Groups */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    .form-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: var(--text-dark);
+    }
+     [data-bs-theme="dark"] .form-label { color: #eee; }
+    .input-wrapper {
+        position: relative;
+        margin-bottom: 0.5rem;
+    }
+    .form-control, .form-select {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+        outline: none;
+    }
+
+    [data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select {
+        background: #2a2a2a;
+        border-color: #444;
+        color: #eee;
+    }
+    
+    .input-help {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #666;
+        margin-top: 0.5rem;
+    }
+    [data-bs-theme="dark"] .input-help { color: #aaa; }
+    
+    .input-group .form-control {
+        border-radius: 0 12px 12px 0;
+    }
+    .input-group .input-group-text {
+        border-radius: 12px 0 0 12px;
+    }
+
+    /* Form Navigation */
+    .form-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+        gap: 1rem;
+    }
+    .btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    .btn-prev {
+        background: #f5f5f5;
+        color: #666;
+        border: none;
+    }
+    .btn-next {
+        background: var(--primary-light);
+        color: white;
+        border: none;
+    }
+    .btn-submit {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        color: white;
+        border: none;
+    }
+
+    /* Help Section */
+    .help-section {
+        margin-top: 4rem;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+    }
+    [data-bs-theme="dark"] .help-section {
+        background: rgba(18, 18, 18, 0.8);
+    }
+    .help-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .help-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+    .help-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+     [data-bs-theme="dark"] .help-card {
+        background: #2a2a2a;
+     }
+    .help-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+    .help-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto 1rem auto;
+        background: rgba(46, 139, 87, 0.1);
+        color: var(--primary);
+    }
+    .help-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0 0;
+        text-align: left;
+    }
+    .help-list li {
+        padding: 0.5rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #666;
+    }
+     [data-bs-theme="dark"] .help-list li { color: #ccc; }
+    .help-list li::before {
+        content: '✓';
+        color: var(--primary);
+        font-weight: bold;
+    }
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+    .is-valid {
+        border-color: #198754 !important;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="recommendation-container">
+        
+        <!-- Main Card -->
+        <div class="main-card">
+            <div class="card-header">
+                <div class="header-content">
+                    <div class="header-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="header-text">
+                        <h2>Smart Crop Advisor</h2>
+                        <p>Get AI-powered recommendations tailored to your farm's unique conditions</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <form id="cropRecommendationForm" method="POST" novalidate>
+                     {% csrf_token %}
+                    <!-- Progress Indicator -->
+                    <div class="progress-steps">
+                        <div class="step active">
+                            <span class="step-number">1</span>
+                            <span class="step-text">Soil Information</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <span class="step-text">Climate Data</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <span class="step-text">Crop Planning</span>
+                        </div>
+                    </div>
+
+                    <!-- Form Sections -->
+                    <div class="form-sections">
+                        <!-- Section 1: Soil Information -->
+                        <div class="form-section active">
+                            <div class="section-header">
+                                <h3><i class="fas fa-mountain"></i> Soil Information</h3>
+                                <p class="section-subtitle">Tell us about your soil composition and conditions</p>
+                            </div>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="{{ form.soil_texture.id_for_label }}" class="form-label">
+                                        <i class="fas fa-layer-group"></i> {{ form.soil_texture.label }}
+                                    </label>
+                                    <div class="input-wrapper">
+                                        {{ form.soil_texture }}
+                                    </div>
+                                    <div class="input-help">
+                                        <span>{{ form.soil_texture.help_text }}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form.soil_ph.id_for_label }}" class="form-label">
+                                        <i class="fas fa-balance-scale"></i> {{ form.soil_ph.label }}
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <div class="input-group">
+                                            {{ form.soil_ph }}
+                                            <span class="input-group-text">pH</span>
+                                        </div>
+                                    </div>
+                                    <div class="input-help">
+                                        <span>Ideal range: 6.0-7.5 for most crops</span>
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="{{ form.organic_matter.id_for_label }}" class="form-label">
+                                        <i class="fas fa-leaf"></i> {{ form.organic_matter.label }}
+                                    </label>
+                                    <div class="input-wrapper">
+                                        {{ form.organic_matter }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form.drainage_status.id_for_label }}" class="form-label">
+                                        <i class="fas fa-tint"></i> {{ form.drainage_status.label }}
+                                    </label>
+                                    <div class="input-wrapper">
+                                        {{ form.drainage_status }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Climate Data -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <h3><i class="fas fa-cloud-sun"></i> Climate Information</h3>
+                                <p class="section-subtitle">Share your local weather patterns</p>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="{{ form.avg_temperature.id_for_label }}" class="form-label">
+                                        <i class="fas fa-temperature-half"></i> {{ form.avg_temperature.label }}
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <div class="input-group">
+                                            {{ form.avg_temperature }}
+                                            <span class="input-group-text">°C</span>
+                                        </div>
+                                    </div>
+                                    <div class="input-help">
+                                        <span>Enter average temperature during growing season</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                     <label for="{{ form.rainfall_mm.id_for_label }}" class="form-label">
+                                        <i class="fas fa-cloud-rain"></i> {{ form.rainfall_mm.label }}
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <div class="input-group">
+                                            {{ form.rainfall_mm }}
+                                            <span class="input-group-text">mm/year</span>
+                                        </div>
+                                    </div>
+                                     <div class="input-help">
+                                        <span>Average annual rainfall in your region</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Crop Planning -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <h3><i class="fas fa-calendar-check"></i> Crop Planning</h3>
+                                <p class="section-subtitle">Tell us about your farming schedule</p>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="{{ form.season.id_for_label }}" class="form-label">
+                                        <i class="fas fa-sun"></i> {{ form.season.label }}
+                                    </label>
+                                    <div class="input-wrapper">
+                                        {{ form.season }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form.previous_crop.id_for_label }}" class="form-label">
+                                        <i class="fas fa-history"></i> {{ form.previous_crop.label }}
+                                    </label>
+                                    <div class="input-wrapper">
+                                        {{ form.previous_crop }}
+                                    </div>
+                                     <div class="input-help">
+                                        <span>Helps with crop rotation recommendations</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-prev" style="display: none;">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-next">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="submit" class="btn btn-submit" style="display: none;">
+                            <i class="fas fa-magic"></i> Get Recommendations
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="help-section">
+            <div class="help-container">
+                <div class="help-header">
+                    <h3><i class="fas fa-lightbulb"></i> Farming Tips & Guidance</h3>
+                    <p class="help-subtitle">Expert advice to maximize your yield</p>
+                </div>
+                
+                <div class="help-grid">
+                    <div class="help-card">
+                        <div class="help-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h4>Soil Management</h4>
+                        <ul class="help-list">
+                            <li>Test soil every 2-3 years</li>
+                            <li>Add organic matter regularly</li>
+                            <li>Maintain proper pH levels</li>
+                            <li>Practice crop rotation</li>
+                        </ul>
+                    </div>
+                     <div class="help-card">
+                        <div class="help-icon" style="color: #2196f3; background: rgba(33, 150, 243, 0.1);">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <h4>Water Management</h4>
+                        <ul class="help-list">
+                            <li>Monitor rainfall patterns</li>
+                            <li>Use drip irrigation for efficiency</li>
+                            <li>Mulch to retain moisture</li>
+                            <li>Water early in the morning</li>
+                        </ul>
+                    </div>
+                     <div class="help-card">
+                        <div class="help-icon" style="color: #ff9800; background: rgba(255, 152, 0, 0.1);">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h4>Seasonal Planning</h4>
+                        <ul class="help-list">
+                            <li>Plan crop rotation in advance</li>
+                            <li>Use cover crops in off-season</li>
+                            <li>Stagger planting for continuous harvest</li>
+                            <li>Monitor weather forecasts</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('cropRecommendationForm');
+    const formSections = document.querySelectorAll('.form-section');
+    const steps = document.querySelectorAll('.step');
+    const prevBtn = document.querySelector('.btn-prev');
+    const nextBtn = document.querySelector('.btn-next');
+    const submitBtn = document.querySelector('.btn-submit');
+    let currentStep = 0;
+
+    function showStep(stepIndex) {
+        formSections.forEach((section, index) => {
+            section.classList.toggle('active', index === stepIndex);
+        });
+        
+        steps.forEach((step, index) => {
+            // Mark current and all previous steps as active
+            if (index <= stepIndex) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        });
+        
+        prevBtn.style.display = stepIndex === 0 ? 'none' : 'inline-flex';
+        nextBtn.style.display = stepIndex === formSections.length - 1 ? 'none' : 'inline-flex';
+        submitBtn.style.display = stepIndex === formSections.length - 1 ? 'inline-flex' : 'none';
+    }
+
+    function validateCurrentStep() {
+        const currentInputs = formSections[currentStep].querySelectorAll('input, select');
+        let isValid = true;
+        
+        currentInputs.forEach(input => {
+            if (!input.checkValidity()) {
+                input.classList.add('is-invalid');
+                input.classList.remove('is-valid');
+                isValid = false;
+            } else {
+                input.classList.remove('is-invalid');
+                input.classList.add('is-valid');
+            }
+        });
+        
+        if (!isValid) {
+            // Optionally, show a notification
+            console.log('Please fill in all required fields correctly');
+        }
+        
+        return isValid;
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (validateCurrentStep()) {
+            currentStep++;
+            if (currentStep < formSections.length) {
+                showStep(currentStep);
+            }
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        currentStep--;
+        if (currentStep >= 0) {
+            showStep(currentStep);
+        }
+    });
+    
+    // Real-time Validation on blur
+    document.querySelectorAll('input, select').forEach(input => {
+        input.addEventListener('blur', () => {
+            if (input.checkValidity()) {
+                input.classList.remove('is-invalid');
+                input.classList.add('is-valid');
+            } else {
+                input.classList.add('is-invalid');
+                input.classList.remove('is-valid');
+            }
+        });
+    });
+
+    // Loading State on submit
+    form.addEventListener('submit', (e) => {
+        if (!validateCurrentStep()) {
+            e.preventDefault();
+            return;
+        }
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Analyzing...`;
+    });
+
+    // Initialize
+    showStep(0);
+});
+</script>
+{% endblock %}

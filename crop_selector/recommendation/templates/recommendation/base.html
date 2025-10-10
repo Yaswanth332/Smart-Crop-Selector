@@ -31,6 +31,8 @@
             --shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
             --transition-base: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             --transition-slow: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* MODIFICATION: Reduced base font size for global scaling */
+            --base-font-size: 14px; 
         }
         
         /* Base Styles */
@@ -51,6 +53,8 @@
             background-attachment: fixed;
             animation: fadeIn 1.2s ease;
             overflow-x: hidden;
+            /* MODIFICATION: Applied the base font size to the body */
+            font-size: var(--base-font-size);
         }
         
         [data-bs-theme="dark"] body {
@@ -67,7 +71,8 @@
         }
         
         h1 {
-            font-size: 3rem;
+            /* MODIFICATION: Reduced h1 font size */
+            font-size: 2.5rem; 
             font-weight: 800;
             background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
             -webkit-background-clip: text;
@@ -83,11 +88,12 @@
         }
         
         h2 {
-            font-size: 2.2rem;
+            /* MODIFICATION: Reduced h2 font size */
+            font-size: 1.8rem; 
             color: var(--primary-dark);
             position: relative;
             display: inline-block;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem; /* Also reduced margin for better spacing */
         }
         
         [data-bs-theme="dark"] h2 {
@@ -97,10 +103,10 @@
         h2:after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -8px; /* Adjusted position */
             left: 0;
-            width: 60px;
-            height: 4px;
+            width: 50px; /* Slightly smaller underline */
+            height: 3px; /* Slightly thinner underline */
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             border-radius: 2px;
             animation: expandWidth 0.8s ease;
@@ -113,17 +119,21 @@
         
         @keyframes expandWidth {
             from { width: 0; }
-            to { width: 60px; }
+            to { width: 50px; } /* Matched new width */
         }
         
         /* Layout Components */
-        .bg-overlay {
-            min-height: 100vh;
-            padding: 2rem 0;
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-            animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-        }
+        /* Layout Components */
+.bg-overlay {
+    min-height: 100vh;
+    /* --- NEW PROPERTY FOR CONTENT PADDING --- */
+    padding-top: 100px;      /* Adjust this value based on your navbar's height */
+    padding: 1.5rem 0;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
         
         @keyframes slideUp {
             from { 
@@ -137,17 +147,27 @@
         }
         
         /* Navbar - Modern Glass Morphism */
-        .navbar {
-            background: rgba(255, 255, 255, 0.85) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: var(--shadow-sm);
-            padding: 0.8rem 2rem;
-            border-radius: 0 0 15px 15px;
-            margin-bottom: 2rem;
-            transition: var(--transition-slow);
-        }
+        /* Navbar - Modern Glass Morphism */
+.navbar {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-sm);
+    padding: 0.6rem 1.5rem;
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 1.5rem;
+    transition: var(--transition-slow);
+
+    /* --- NEW PROPERTIES FOR FIXED HEADER --- */
+    position: fixed;         /* Fixes the navbar to the viewport */
+    top: 0;                  /* Positions it at the very top */
+    left: 0;                 /* Positions it at the very left */
+    width: 100%;             /* Makes it span the full width */
+    z-index: 1000;           /* Ensures it stays on top of other elements */
+    border-radius: 0;        /* Removes bottom border-radius for a clean look */
+}
+
         
         .navbar:hover {
             box-shadow: var(--shadow-md);
@@ -161,7 +181,8 @@
         .navbar-brand {
             font-family: 'Montserrat', sans-serif;
             font-weight: 800;
-            font-size: 1.8rem;
+            /* MODIFICATION: Reduced brand font size */
+            font-size: 1.5rem; 
             display: flex;
             align-items: center;
             color: var(--primary-dark);
@@ -173,8 +194,9 @@
         }
         
         .brand-icon {
-            margin-right: 0.5rem;
-            font-size: 1.8rem;
+            margin-right: 0.4rem; /* Adjusted margin */
+            /* MODIFICATION: Reduced icon font size */
+            font-size: 1.5rem; 
             animation: pulse 2s infinite;
         }
         
@@ -187,12 +209,14 @@
         .nav-link {
             font-family: 'Poppins', sans-serif;
             font-weight: 500;
-            padding: 0.5rem 1rem !important;
-            margin: 0 0.3rem;
-            border-radius: 8px;
+            /* MODIFICATION: Reduced nav-link padding */
+            padding: 0.4rem 0.8rem !important; 
+            margin: 0 0.2rem;
+            border-radius: 6px; /* Slightly smaller radius */
             color: var(--text-dark);
             position: relative;
             transition: var(--transition-base);
+            font-size: 0.9em; /* Slightly smaller font */
         }
         
         [data-bs-theme="dark"] .nav-link {
@@ -222,19 +246,20 @@
         .nav-link.active:after {
             content: '';
             position: absolute;
-            bottom: -5px;
+            bottom: -4px;
             left: 50%;
             transform: translateX(-50%);
-            width: 50%;
-            height: 3px;
+            width: 40%;
+            height: 2px;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            border-radius: 3px;
+            border-radius: 2px;
         }
         
         /* Cards - Modern 3D Effect */
         .card {
             border: none;
-            border-radius: 12px;
+            /* MODIFICATION: Reduced card border-radius */
+            border-radius: 8px; 
             overflow: hidden;
             box-shadow: var(--shadow-sm);
             transition: var(--transition-slow);
@@ -250,7 +275,7 @@
         }
         
         .card:hover {
-            transform: perspective(1000px) translateY(-10px) rotateX(5deg);
+            transform: perspective(1000px) translateY(-8px) rotateX(5deg); /* Reduced hover effect */
             box-shadow: var(--shadow-lg);
         }
         
@@ -259,7 +284,8 @@
             color: white;
             font-weight: 600;
             border-bottom: none;
-            padding: 1.2rem;
+            /* MODIFICATION: Reduced card-header padding */
+            padding: 1rem; 
         }
         
         [data-bs-theme="dark"] .card-header {
@@ -267,15 +293,18 @@
         }
         
         .card-body {
-            padding: 1.5rem;
+            /* MODIFICATION: Reduced card-body padding */
+            padding: 1.2rem; 
         }
         
         /* Buttons - Modern Gradient with Hover Effects */
         .btn {
             border: none;
-            border-radius: 8px;
+            border-radius: 6px; /* Slightly smaller radius */
             font-weight: 600;
-            padding: 0.75rem 1.5rem;
+            /* MODIFICATION: Reduced button padding and font size */
+            padding: 0.5rem 1.2rem; 
+            font-size: 0.85em;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             position: relative;
@@ -307,7 +336,7 @@
         }
         
         .btn-primary:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px); /* Reduced hover effect */
             box-shadow: var(--shadow-md);
         }
         
@@ -324,8 +353,9 @@
         
         /* Forms - Modern Styling */
         .form-control {
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
+            border-radius: 6px; /* Slightly smaller radius */
+            /* MODIFICATION: Reduced form-control padding */
+            padding: 0.6rem 0.9rem; 
             border: 1px solid rgba(0,0,0,0.1);
             transition: var(--transition-base);
             background: rgba(255,255,255,0.8);
@@ -333,7 +363,7 @@
         
         .form-control:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgba(46, 139, 87, 0.25);
+            box-shadow: 0 0 0 0.2rem rgba(46, 139, 87, 0.25); /* Slightly smaller focus shadow */
             background: white;
         }
         
@@ -349,8 +379,8 @@
         
         /* Theme Toggle - Animated */
         .theme-toggle {
-            width: 40px;
-            height: 40px;
+            width: 36px; /* Slightly smaller */
+            height: 36px; /* Slightly smaller */
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -384,21 +414,21 @@
         /* Responsive Adjustments */
         @media (max-width: 992px) {
             h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem; /* Adjusted for consistency */
             }
             
             h2 {
-                font-size: 1.8rem;
+                font-size: 1.6rem; /* Adjusted for consistency */
             }
             
             .navbar {
-                padding: 0.7rem 1rem;
+                padding: 0.6rem 1rem;
             }
         }
         
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem; /* Adjusted for consistency */
             }
             
             .bg-overlay {
@@ -416,7 +446,7 @@
         
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px; /* Slightly thinner */
         }
         
         ::-webkit-scrollbar-track {
@@ -425,7 +455,7 @@
         
         ::-webkit-scrollbar-thumb {
             background: var(--primary-color);
-            border-radius: 5px;
+            border-radius: 4px; /* Adjusted radius */
         }
         
         [data-bs-theme="dark"] ::-webkit-scrollbar-thumb {

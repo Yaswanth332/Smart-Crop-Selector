@@ -1,0 +1,467 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark"> <!-- Defaulting to dark theme as per Spotify style -->
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}AgriSmart | Crop Advisor{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Preload critical fonts & CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================
+           Spotify-Inspired Theme & Colors
+           ========================= */
+        :root {
+            --primary: #2E8B57; /* Green for primary actions & accents */
+            --primary-light: #3CB371;
+            --secondary: #FFA500; /* Orange for secondary info/warnings */
+            --accent: #2196f3;   /* Blue for links & informational alerts */
+
+            /* Dark Mode (Default) */
+            --bg-main: #121212;
+            --bg-sidebar: #000000;
+            --bg-card: #181818;
+            --text-primary: #FFFFFF;
+            --text-secondary: #b3b3b3;
+            --border-color: #282828;
+
+            /* Light Mode */
+            --bg-main-light: #f5f7fa;
+            --bg-sidebar-light: #ffffff;
+            --bg-card-light: #ffffff;
+            --text-primary-light: #213043;
+            --text-secondary-light: #6c757d;
+            --border-color-light: #dee2e6;
+
+            /* Typography */
+            --font-title: 'Poppins', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+            
+            --trans: 0.3s ease;
+        }
+
+        [data-bs-theme="light"] {
+            --bg-main: var(--bg-main-light);
+            --bg-sidebar: var(--bg-sidebar-light);
+            --bg-card: var(--bg-card-light);
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+            --border-color: var(--border-color-light);
+        }
+
+        /* =========================
+           Base & Layout
+           ========================= */
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            margin: 0;
+            height: 100vh;
+        }
+        
+        .page-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* =========================
+           DESKTOP Sidebar
+           ========================= */
+        .sidebar {
+            width: 250px;
+            background-color: var(--bg-sidebar);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+            z-index: 1000;
+            height: 100%; /* Ensure full height */
+        }
+        
+        .sidebar-header {
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 1.7rem; /* Adjusted font size */
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .sidebar-header i {
+            color: var(--primary); /* Added color to icon */
+            font-size: 2rem;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--trans), background-color var(--trans);
+        }
+
+        .nav-item a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-item a.active {
+            color: var(--text-primary);
+            background-color: var(--border-color);
+        }
+        
+        .nav-item a i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+        /* =========================
+           Main Content Area
+           ========================= */
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            height: 100vh;
+            padding: 1.5rem;
+            display: flex; /* Flex container for footer positioning */
+            flex-direction: column;
+        }
+        
+        main {
+            flex-grow: 1; /* Pushes footer to the bottom */
+        }
+        
+        /* Custom scrollbar */
+        .main-content::-webkit-scrollbar { width: 8px; }
+        .main-content::-webkit-scrollbar-track { background: transparent; }
+        .main-content::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+        
+        
+        /* =========================
+           MOBILE Top Header
+           ========================= */
+        .mobile-header {
+            background-color: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1rem; /* Adjusted padding */
+        }
+        .mobile-header .navbar-brand {
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 1.5rem; /* Adjusted font size */
+            color: var(--text-primary);
+        }
+         .mobile-header .navbar-brand i {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        .mobile-header .navbar-toggler {
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        .mobile-header .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        [data-bs-theme="light"] .mobile-header .navbar-toggler-icon {
+             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.7%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        .mobile-nav-content {
+             background-color: var(--bg-sidebar);
+             padding: 1rem;
+             height: calc(100vh - 66px); /* Full height minus header */
+             display: flex;
+             flex-direction: column;
+        }
+        .mobile-nav-content .navbar-nav {
+            flex-grow: 1;
+        }
+        .mobile-nav-content .nav-link, 
+        .mobile-nav-content .nav-button {
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.8rem 1rem !important;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-secondary);
+            border-radius: 8px;
+        }
+        .mobile-nav-content .nav-link:hover,
+        .mobile-nav-content .nav-button:hover {
+            color: var(--text-primary);
+        }
+         .mobile-nav-content .nav-button {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+         }
+
+
+        /* =========================
+           Footer
+           ========================= */
+        .site-footer {
+            padding: 1rem 0;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            margin-top: auto; /* Pushes footer to bottom of flex container */
+            flex-shrink: 0;
+        }
+
+        /* =========================
+           Responsive Design
+           ========================= */
+        @media (max-width: 991.98px) {
+            .page-wrapper {
+                display: block; /* Stack sidebar and content */
+            }
+            .main-content {
+                padding-top: 85px; /* Add space for fixed mobile header */
+                height: auto;
+            }
+        }
+
+        /* =========================
+           Typography & Components
+           ========================= */
+        h1, h2, h3, h4 { font-family: var(--font-title); font-weight: 600; }
+        h1 { font-size: 2.2rem; }
+        h2 { font-size: 1.5rem; }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .custom-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: transform var(--trans), box-shadow var(--trans);
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        a:focus-visible, button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+            box-shadow: none;
+        }
+
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <!-- Collapsible Spotify-Style Sidebar -->
+        <aside class="sidebar d-none d-lg-flex" id="sidebar">
+            <a href="{% url 'home' %}" class="sidebar-header">
+                <i class="fas fa-leaf"></i>
+                <span>AgriSmart</span>
+            </a>
+
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'recommend' %}" class="{% if request.resolver_match.url_name == 'recommend' %}active{% endif %}">
+                        <i class="fas fa-search"></i> Crop Advisor
+                    </a>
+                </li>
+                 {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a href="{% url 'past_recommendations' %}" class="{% if request.resolver_match.url_name == 'past_recommendations' %}active{% endif %}">
+                        <i class="fas fa-book-open"></i> My Farm Log
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <div class="sidebar-footer">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="btn btn-outline-secondary w-100 mb-2">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-light w-100 mb-2">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-gradient w-100">Register</a>
+                {% endif %}
+                 <button id="toggleTheme" class="btn btn-outline-secondary w-100 mt-3" aria-label="Toggle theme">
+                    <i class="fas fa-moon" id="theme-icon"></i> <span>Toggle Theme</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-content" id="main-content">
+            
+            <main>
+                {% block hero %}{% endblock %}
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                {% block content %}{% endblock %}
+
+                {% block dashboard %}{% endblock %}
+            </main>
+
+            <footer class="site-footer">
+                &copy; {% now "Y" %} AgriSmart - Smart Farming Solutions
+            </footer>
+        </div>
+    </div>
+
+    <!-- Mobile Top Navigation -->
+    <nav class="navbar d-lg-none fixed-top mobile-header">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}"><i class="fas fa-leaf"></i> AgriSmart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNav" aria-controls="mobileNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mobileNav">
+                <div class="mobile-nav-content">
+                    <ul class="navbar-nav">
+                         <li class="nav-item">
+                            <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                                <i class="fas fa-home fa-fw me-2"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'recommend' %}" class="nav-link {% if request.resolver_match.url_name == 'recommend' %}active{% endif %}">
+                                <i class="fas fa-search fa-fw me-2"></i> Crop Advisor
+                            </a>
+                        </li>
+                         {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'past_recommendations' %}" class="nav-link {% if request.resolver_match.url_name == 'past_recommendations' %}active{% endif %}">
+                                <i class="fas fa-book-open fa-fw me-2"></i> My Farm Log
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <div class="mt-auto">
+                        <hr class="border-secondary my-2">
+                         <ul class="navbar-nav">
+                            {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a href="{% url 'logout' %}" class="nav-link">
+                                        <i class="fas fa-sign-out-alt fa-fw me-2"></i> Logout
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a href="{% url 'login' %}" class="nav-link">
+                                        <i class="fas fa-sign-in-alt fa-fw me-2"></i> Login
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'register' %}" class="nav-link">
+                                        <i class="fas fa-user-plus fa-fw me-2"></i> Register
+                                    </a>
+                                </li>
+                            {% endif %}
+                             <li class="nav-item">
+                                <button id="mobileToggleTheme" class="nav-button">
+                                    <i class="fas fa-moon fa-fw me-2" id="mobile-theme-icon"></i> <span>Toggle Theme</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const html = document.documentElement;
+            const themeTogglers = [document.getElementById('toggleTheme'), document.getElementById('mobileToggleTheme')];
+            const themeIcons = [document.getElementById('theme-icon'), document.getElementById('mobile-theme-icon')];
+
+            // Theme Toggle Logic
+            const savedTheme = localStorage.getItem('agriSmartTheme') || 'dark';
+            html.setAttribute('data-bs-theme', savedTheme);
+
+            function updateIcons(theme) {
+                const iconClass = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                themeIcons.forEach(icon => {
+                    if(icon) icon.className = icon.className.replace(/fa-(moon|sun)/, iconClass.split(' ')[1]);
+                });
+            }
+            updateIcons(savedTheme);
+
+            themeTogglers.forEach(toggleBtn => {
+                if(toggleBtn) {
+                    toggleBtn.addEventListener('click', () => {
+                        const currentTheme = html.getAttribute('data-bs-theme');
+                        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                        html.setAttribute('data-bs-theme', newTheme);
+                        localStorage.setItem('agriSmartTheme', newTheme);
+                        updateIcons(newTheme);
+                    });
+                }
+            });
+
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+

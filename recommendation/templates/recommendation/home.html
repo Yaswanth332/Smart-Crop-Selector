@@ -1,0 +1,736 @@
+{% extends 'recommendation/base.html' %}
+{% load static %}
+{% block title %}Home | AgriSmart{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Spotify-style gradient -->
+<section class="hero-section position-relative overflow-hidden">
+  <div class="hero-gradient"></div>
+  <div class="hero-overlay d-flex align-items-center">
+    <div class="container text-center py-5 my-5" data-aos="zoom-in">
+      <div class="hero-content mx-auto">
+        <div class="hero-icon animate__animated animate__pulse animate__infinite animate__slow mb-4">
+          <img src="{% static 'images/wheat-icon.jpg' %}" alt="Wheat Icon" class="rounded-circle">
+        </div>
+        <h1 class="hero-title fw-bold mb-4">Smart Farming Starts Here</h1>
+        <p class="hero-subtitle mb-5">
+          AI-powered crop recommendations tailored to your land, soil, and climate conditions. 
+          Maximize your harvest with data-driven insights.
+        </p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          {% if user.is_authenticated %}
+            <a href="{% url 'recommend' %}" class="btn btn-spotify-primary btn-lg">
+              <i class="fas fa-seedling me-2"></i> Get Recommendations
+            </a>
+            <a href="{% url 'past_recommendations' %}" class="btn btn-spotify-secondary btn-lg">
+              <i class="fas fa-history me-2"></i> My Farm Log
+            </a>
+          {% else %}
+            <a href="{% url 'login' %}" class="btn btn-spotify-primary btn-lg">
+              <i class="fas fa-sign-in-alt me-2"></i> Sign In
+            </a>
+            <a href="{% url 'register' %}" class="btn btn-spotify-secondary btn-lg">
+              <i class="fas fa-user-plus me-2"></i> Register
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-particles"></div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 features-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <h2 class="section-title fw-bold mb-3">Why Farmers Choose AgriSmart</h2>
+      <div class="spotify-divider mx-auto"></div>
+      <p class="section-subtitle text-muted mx-auto">
+        Our platform combines agricultural expertise with cutting-edge technology to help you make the best decisions for your farm.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="spotify-card feature-card h-100">
+          <div class="feature-icon-wrapper">
+            <div class="feature-icon spotify-green">
+              <i class="fas fa-robot"></i>
+            </div>
+          </div>
+          <h3 class="feature-title">AI-Powered Insights</h3>
+          <p class="feature-description">
+            Our advanced algorithms analyze soil composition, weather patterns, and market trends to recommend optimal crops.
+          </p>
+        </div>
+      </div>
+      
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="spotify-card feature-card h-100">
+          <div class="feature-icon-wrapper">
+            <div class="feature-icon spotify-purple">
+              <i class="fas fa-database"></i>
+            </div>
+          </div>
+          <h3 class="feature-title">Comprehensive Database</h3>
+          <p class="feature-description">
+            Access information on 150+ crops including growth cycles, soil requirements, and profitability metrics.
+          </p>
+        </div>
+      </div>
+      
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="spotify-card feature-card h-100">
+          <div class="feature-icon-wrapper">
+            <div class="feature-icon spotify-orange">
+              <i class="fas fa-chart-line"></i>
+            </div>
+          </div>
+          <h3 class="feature-title">Performance Tracking</h3>
+          <p class="feature-description">
+            Monitor your farm's progress over time with detailed analytics and historical recommendations.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 how-it-works-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <h2 class="section-title fw-bold mb-3">How AgriSmart Works</h2>
+      <div class="spotify-divider mx-auto"></div>
+    </div>
+
+    <div class="row align-items-center">
+      <div class="col-lg-6" data-aos="fade-right">
+        <div class="spotify-image-container">
+          <img src="{% static 'images/farmer-tablet.jpg' %}" alt="Farmer using tablet" class="img-fluid spotify-rounded">
+        </div>
+      </div>
+      <div class="col-lg-6 mt-4 mt-lg-0" data-aos="fade-left">
+        <div class="steps">
+          <div class="spotify-step mb-4">
+            <div class="step-number spotify-green-bg">1</div>
+            <div class="step-content">
+              <h4 class="step-title">Enter Your Farm Details</h4>
+              <p class="step-description">
+                Provide information about your soil type, location, farm size, and previous crops.
+              </p>
+            </div>
+          </div>
+          
+          <div class="spotify-step mb-4">
+            <div class="step-number spotify-purple-bg">2</div>
+            <div class="step-content">
+              <h4 class="step-title">Get Personalized Recommendations</h4>
+              <p class="step-description">
+                Our system analyzes your data and suggests the most suitable crops for optimal yield.
+              </p>
+            </div>
+          </div>
+          
+          <div class="spotify-step">
+            <div class="step-number spotify-orange-bg">3</div>
+            <div class="step-content">
+              <h4 class="step-title">Implement & Track Results</h4>
+              <p class="step-description">
+                Plant your selected crops and monitor their performance through our tracking tools.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section (for logged in users) -->
+{% if user.is_authenticated %}
+<section class="py-5 stats-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <h2 class="section-title fw-bold mb-3">Your Farming Journey</h2>
+      <div class="spotify-divider mx-auto"></div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="spotify-card stat-card text-center">
+          <div class="stat-number spotify-green">{{ user.cropquery_set.count }}</div>
+          <h3 class="stat-title">Total Queries</h3>
+          <p class="stat-description">Recommendations requested</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="spotify-card stat-card text-center">
+          <div class="stat-number spotify-purple">150+</div>
+          <h3 class="stat-title">Crops Available</h3>
+          <p class="stat-description">In our database</p>
+        </div>
+      </div>
+      
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="spotify-card stat-card text-center">
+          <div class="stat-number spotify-orange">
+            {% if user.cropquery_set.exists %}
+              {{ user.cropquery_set.first.created_at|timesince }}
+            {% else %}
+              New
+            {% endif %}
+          </div>
+          <h3 class="stat-title">
+            {% if user.cropquery_set.exists %}
+              Since Last Query
+            {% else %}
+              Farmer
+            {% endif %}
+          </h3>
+          <p class="stat-description">Time with AgriSmart</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5" data-aos="fade-up">
+      <a href="{% url 'recommend' %}" class="btn btn-spotify-primary btn-lg me-3">
+        <i class="fas fa-seedling me-2"></i> New Recommendation
+      </a>
+      <a href="{% url 'past_recommendations' %}" class="btn btn-spotify-secondary btn-lg">
+        <i class="fas fa-history me-2"></i> View History
+      </a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Testimonials Section -->
+<section class="py-5 testimonials-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <h2 class="section-title fw-bold mb-3">What Farmers Say</h2>
+      <div class="spotify-divider mx-auto"></div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="spotify-card testimonial-card h-100">
+          <div class="quote-icon spotify-green">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <p class="testimonial-text">
+            AgriSmart helped me increase my yield by 30% in just one season. The crop recommendations were spot on!
+          </p>
+          <div class="testimonial-author">
+            <img src="{% static 'images/farmer1.jpg' %}" alt="Rajesh Kumar" class="author-avatar">
+            <div class="author-info">
+              <h5 class="author-name">Rajesh Kumar</h5>
+              <p class="author-role">Wheat Farmer, Punjab</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="spotify-card testimonial-card h-100">
+          <div class="quote-icon spotify-purple">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <p class="testimonial-text">
+            The soil analysis feature saved me thousands in unnecessary fertilizers. Highly recommended for all farmers.
+          </p>
+          <div class="testimonial-author">
+            <img src="{% static 'images/farmer2.jpg' %}" alt="Priya Patel" class="author-avatar">
+            <div class="author-info">
+              <h5 class="author-name">Priya Patel</h5>
+              <p class="author-role">Organic Farmer, Maharashtra</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="spotify-card testimonial-card h-100">
+          <div class="quote-icon spotify-orange">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <p class="testimonial-text">
+            As a new farmer, the detailed crop information and planting guides have been invaluable to my success.
+          </p>
+          <div class="testimonial-author">
+            <img src="{% static 'images/farmer3.jpg' %}" alt="Amit Singh" class="author-avatar">
+            <div class="author-info">
+              <h5 class="author-name">Amit Singh</h5>
+              <p class="author-role">First-Gen Farmer, Uttar Pradesh</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  :root {
+    --spotify-black: #121212;
+    --spotify-dark: #191414;
+    --spotify-darker: #0f0f0f;
+    --spotify-green: #1db954;
+    --spotify-purple: #8b5cf6;
+    --spotify-orange: #ff6b35;
+    --spotify-light-gray: #b3b3b3;
+    --spotify-medium-gray: #535353;
+    --spotify-dark-gray: #282828;
+    --spotify-white: #ffffff;
+  }
+
+  /* Global Spotify-style typography */
+  body {
+    background-color: var(--spotify-black);
+    color: var(--spotify-white);
+    font-family: 'Circular Std', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    background: var(--spotify-dark);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(135deg, #1db954 0%, #8b5cf6 50%, #ff6b35 100%);
+    opacity: 0.1;
+    z-index: 1;
+  }
+
+  .hero-overlay {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+
+  .hero-content {
+    max-width: 900px;
+    padding: 3rem;
+    background: rgba(25, 20, 20, 0.8);
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hero-icon img {
+    width: 100px;
+    height: 100px;
+    border: 3px solid var(--spotify-green);
+  }
+
+  .hero-title {
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--spotify-white);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--spotify-light-gray);
+    font-weight: 400;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* Spotify-style buttons */
+  .btn-spotify-primary {
+    background: var(--spotify-green);
+    border: none;
+    color: var(--spotify-black);
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 16px 32px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    text-transform: none;
+  }
+
+  .btn-spotify-primary:hover {
+    background: #1ed760;
+    color: var(--spotify-black);
+    transform: scale(1.04);
+  }
+
+  .btn-spotify-secondary {
+    background: transparent;
+    border: 2px solid var(--spotify-white);
+    color: var(--spotify-white);
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 14px 30px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-spotify-secondary:hover {
+    background: var(--spotify-white);
+    color: var(--spotify-black);
+    transform: scale(1.04);
+  }
+
+  /* Sections */
+  .features-section {
+    background: var(--spotify-darker);
+  }
+
+  .how-it-works-section {
+    background: var(--spotify-black);
+  }
+
+  .stats-section {
+    background: var(--spotify-dark);
+  }
+
+  .testimonials-section {
+    background: var(--spotify-darker);
+  }
+
+  /* Typography */
+  .section-title {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--spotify-white);
+    letter-spacing: -0.04em;
+  }
+
+  .section-subtitle {
+    font-size: 1.1rem;
+    color: var(--spotify-light-gray);
+    max-width: 700px;
+  }
+
+  /* Spotify Divider */
+  .spotify-divider {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--spotify-green), var(--spotify-purple));
+    border-radius: 2px;
+    margin: 1.5rem auto;
+  }
+
+  /* Spotify Cards */
+  .spotify-card {
+    background: var(--spotify-dark-gray);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spotify-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--spotify-green), var(--spotify-purple), var(--spotify-orange));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .spotify-card:hover {
+    background: #2a2a2a;
+    transform: translateY(-8px);
+  }
+
+  .spotify-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Feature Cards */
+  .feature-icon-wrapper {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .feature-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spotify-green {
+    background: var(--spotify-green);
+    color: var(--spotify-black);
+  }
+
+  .spotify-purple {
+    background: var(--spotify-purple);
+    color: var(--spotify-white);
+  }
+
+  .spotify-orange {
+    background: var(--spotify-orange);
+    color: var(--spotify-white);
+  }
+
+  .feature-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--spotify-white);
+    margin-bottom: 1rem;
+  }
+
+  .feature-description {
+    color: var(--spotify-light-gray);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* Image Container */
+  .spotify-image-container {
+    position: relative;
+  }
+
+  .spotify-rounded {
+    border-radius: 16px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Steps */
+  .spotify-step {
+    position: relative;
+    padding-left: 100px;
+    margin-bottom: 2rem;
+  }
+
+  .step-number {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--spotify-black);
+  }
+
+  .spotify-green-bg {
+    background: var(--spotify-green);
+  }
+
+  .spotify-purple-bg {
+    background: var(--spotify-purple);
+  }
+
+  .spotify-orange-bg {
+    background: var(--spotify-orange);
+  }
+
+  .step-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--spotify-white);
+    margin-bottom: 0.5rem;
+  }
+
+  .step-description {
+    color: var(--spotify-light-gray);
+    font-size: 1rem;
+  }
+
+  /* Stats Cards */
+  .stat-number {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .stat-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--spotify-white);
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-description {
+    color: var(--spotify-light-gray);
+    font-size: 1rem;
+  }
+
+  /* Testimonials */
+  .quote-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .testimonial-text {
+    font-size: 1.1rem;
+    color: var(--spotify-light-gray);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .author-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--spotify-green);
+  }
+
+  .author-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--spotify-white);
+    margin-bottom: 0.25rem;
+  }
+
+  .author-role {
+    font-size: 0.9rem;
+    color: var(--spotify-light-gray);
+    margin: 0;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+    }
+
+    .hero-content {
+      padding: 2rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .spotify-step {
+      padding-left: 80px;
+    }
+
+    .step-number {
+      width: 60px;
+      height: 60px;
+      font-size: 1.25rem;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+    }
+  }
+
+  /* Animations */
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .hero-icon {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--spotify-black);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--spotify-medium-gray);
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--spotify-light-gray);
+  }
+</style>
+
+<script>
+  // Initialize AOS animation
+  document.addEventListener('DOMContentLoaded', function() {
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true,
+      offset: 100
+    });
+    
+    // Enhanced card interactions
+    const cards = document.querySelectorAll('.spotify-card');
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-8px) scale(1.02)';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+
+    // Button hover effects
+    const buttons = document.querySelectorAll('.btn-spotify-primary, .btn-spotify-secondary');
+    buttons.forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.style.transform = 'scale(1.04)';
+      });
+      
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = '';
+      });
+    });
+
+    // Add subtle parallax effect to hero
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const parallax = document.querySelector('.hero-gradient');
+      if (parallax) {
+        const speed = scrolled * 0.5;
+        parallax.style.transform = `translateY(${speed}px)`;
+      }
+    });
+  });
+</script>
+{% endblock %}

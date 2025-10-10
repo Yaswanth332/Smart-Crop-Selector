@@ -3,40 +3,43 @@
 {% block title %}Smart Crop Advisor | AI-Powered Farming Recommendations{% endblock %}
 
 {% block extra_head %}
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
     :root {
-        --primary: #2e7d32;
-        --primary-light: #4caf50;
-        --primary-dark: #1b5e20;
-        --secondary: #ff9800;
-        --accent: #2196f3;
-        --text-dark: #263238;
-        --text-light: #607d8b;
-        --bg-light: #f5f7fa;
+        /* --- Refined Color Palette --- */
+        --primary-green: #2E7D32;
+        --light-green: #4CAF50;
+        --accent-green: #81C784;
+        --dark-green: #1B5E20;
+        --primary-orange: #FF9800;
+        --primary-blue: #2196F3;
+        --text-primary: #212121;
+        --text-secondary: #757575;
+        --text-light: #FFFFFF;
+        --bg-light: #F5F7FA;
         --bg-dark: #121212;
-        --card-bg: rgba(255, 255, 255, 0.85);
-        --card-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        --card-bg-light: #FFFFFF;
+        --card-bg-dark: #1E1E1E;
+        --border-color: #E0E0E0;
+        --border-color-dark: #333333;
+        --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --shadow-strong: 0 8px 30px rgba(0, 0, 0, 0.12);
     }
 
     body {
-        font-family: 'Open Sans', sans-serif;
+        font-family: 'Poppins', sans-serif; /* Using Poppins as the primary font for a cleaner look */
         background-color: var(--bg-light);
-        color: var(--text-dark);
-        background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2670&auto=format&fit=crop');
+        color: var(--text-primary);
+        /* Replaced busy background with a subtle, clean one */
+        background-image: linear-gradient(rgba(245, 247, 250, 0.95), rgba(245, 247, 250, 0.95)), url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80');
         background-size: cover;
         background-attachment: fixed;
         background-position: center;
-        background-blend-mode: overlay;
-        background-color: rgba(245, 247, 250, 0.9);
     }
 
     [data-bs-theme="dark"] body {
         background-color: var(--bg-dark);
-        color: #e0e0e0;
-        background-blend-mode: overlay;
-        background-color: rgba(18, 18, 18, 0.9);
+        color: #E0E0E0;
+        background-image: linear-gradient(rgba(18, 18, 18, 0.95), rgba(18, 18, 18, 0.95)), url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80');
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -44,663 +47,271 @@
         font-weight: 600;
     }
 
-    /* Main container */
+    /* --- Main Container --- */
     .recommendation-container {
-        padding: 3rem 0;
-        animation: fadeIn 0.8s ease-out;
+        padding: 4rem 1rem; /* Increased top padding for better spacing from fixed header */
     }
 
-    /* Animated background particles */
-    .particles {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        pointer-events: none;
-    }
-
-    .particle {
-        position: absolute;
-        background-color: rgba(76, 175, 80, 0.3);
-        border-radius: 50%;
-        animation: float 15s infinite linear;
-    }
-
-    @keyframes float {
-        0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 0;
-        }
-        10% {
-            opacity: 0.5;
-        }
-        100% {
-            transform: translateY(-100vh) rotate(360deg);
-            opacity: 0;
-        }
-    }
-
-    /* Main card styling */
+    /* --- Main Card Styling --- */
     .recommendation-card {
-        background: var(--card-bg);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: none;
-        border-radius: 24px;
+        background: var(--card-bg-light);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        box-shadow: var(--shadow-light);
         overflow: hidden;
-        box-shadow: var(--card-shadow);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        transform: translateY(30px);
-        opacity: 0;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .recommendation-card.animate-in {
-        animation: slideUpFadeIn 0.8s ease-out forwards;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     [data-bs-theme="dark"] .recommendation-card {
-        background: rgba(30, 30, 30, 0.85);
-        border-color: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        background: var(--card-bg-dark);
+        border-color: var(--border-color-dark);
+        box-shadow: var(--shadow-strong);
     }
 
     .recommendation-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        box-shadow: var(--shadow-strong);
     }
 
-    /* Card header with animated gradient */
+    /* --- Card Header --- */
     .card-header {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-        color: white;
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        color: var(--text-light);
         border: none;
-        padding: 2rem;
-        position: relative;
-        overflow: hidden;
+        padding: 2.5rem 2rem;
         text-align: center;
     }
 
-    .card-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(
-            to bottom right,
-            rgba(255, 255, 255, 0.3) 0%,
-            rgba(255, 255, 255, 0) 60%
-        );
-        transform: rotate(30deg);
-        animation: shine 8s infinite;
-    }
-
-    @keyframes shine {
-        0% { transform: translateX(-100%) rotate(30deg); }
-        20% { transform: translateX(100%) rotate(30deg); }
-        100% { transform: translateX(100%) rotate(30deg); }
-    }
-
     .card-header h3 {
-        font-size: 2rem;
-        margin-bottom: 0.75rem;
-        position: relative;
-        z-index: 1;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        opacity: 0;
-        transform: translateY(-20px);
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
     }
-
+    
     .card-header p {
         font-size: 1.1rem;
         opacity: 0.9;
-        position: relative;
-        z-index: 1;
-        margin-bottom: 0;
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    .card-header.animate-in h3 {
-        animation: fadeInDown 0.6s ease-out 0.2s forwards;
-    }
-
-    .card-header.animate-in p {
-        animation: fadeInUp 0.6s ease-out 0.4s forwards;
-    }
-
-    /* Section headers */
-    .section-header {
-        margin-bottom: 2rem;
-        position: relative;
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-
-    .section-header.animate-in {
-        animation: slideInLeft 0.6s ease-out forwards;
-    }
-
-    .section-header h5 {
-        font-weight: 600;
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-size: 1.25rem;
-    }
-
-    .section-header hr {
-        height: 3px;
-        opacity: 0.3;
-        border: none;
-        background: linear-gradient(90deg, currentColor, transparent);
-        width: 0;
         margin: 0;
     }
 
-    .section-header.animate-in hr {
-        animation: expandWidth 0.8s ease-out 0.3s forwards;
+    /* --- Section Headers --- */
+    .section-header {
+        margin-top: 2.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--border-color);
     }
 
-    /* Form elements */
-    .form-row {
-        opacity: 0;
-        transform: translateY(20px);
+    [data-bs-theme="dark"] .section-header {
+        border-color: var(--border-color-dark);
     }
 
-    .form-row.animate-in {
-        animation: slideUpFadeIn 0.6s ease-out forwards;
-    }
-
-    .form-label {
+    .section-header h5 {
+        font-size: 1.2rem;
         font-weight: 600;
-        margin-bottom: 0.75rem;
+        margin: 0;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        color: var(--text-dark);
-        opacity: 0;
-        transform: translateX(-20px);
+    }
+    
+    .section-header h5 i {
+        margin-right: 0.75rem;
+        font-size: 1.4rem;
+    }
+
+    .section-header.text-success h5 { color: var(--primary-green); }
+    .section-header.text-info h5 { color: var(--primary-blue); }
+    .section-header.text-warning h5 { color: var(--primary-orange); }
+
+    /* --- Form Elements --- */
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
     }
 
     [data-bs-theme="dark"] .form-label {
-        color: #e0e0e0;
-    }
-
-    .form-row.animate-in .form-label {
-        animation: slideInLeft 0.5s ease-out 0.2s forwards;
+        color: #E0E0E0;
     }
 
     .form-control, .form-select {
-        border-radius: 12px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        padding: 0.875rem 1.25rem;
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.8);
-        font-size: 0.95rem;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    .form-row.animate-in .form-control,
-    .form-row.animate-in .form-select {
-        animation: scaleIn 0.5s ease-out 0.3s forwards;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     [data-bs-theme="dark"] .form-control,
     [data-bs-theme="dark"] .form-select {
-        background: rgba(50, 50, 50, 0.7);
-        border-color: rgba(255, 255, 255, 0.15);
-        color: #f0f0f0;
+        background-color: #2C2C2C;
+        border-color: var(--border-color-dark);
+        color: #F0F0F0;
     }
 
     .form-control:focus, .form-select:focus {
-        border-color: var(--primary-light);
-        box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
-        background: rgba(255, 255, 255, 0.95);
-        transform: scale(1.01);
+        border-color: var(--light-green);
+        box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
     }
 
-    [data-bs-theme="dark"] .form-control:focus,
-    [data-bs-theme="dark"] .form-select:focus {
-        background: rgba(60, 60, 60, 0.8);
-        box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.35);
-    }
-
-    /* Input groups */
-    .input-group {
-        border-radius: 12px;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    .form-row.animate-in .input-group {
-        animation: scaleIn 0.5s ease-out 0.3s forwards;
-    }
-
-    .input-group:focus-within {
-        transform: scale(1.01);
-        box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
-    }
-
-    .input-group-text {
-        background: rgba(76, 175, 80, 0.15);
-        border: 1px solid rgba(76, 175, 80, 0.25);
-        color: var(--primary);
-        font-size: 1rem;
-    }
-
-    [data-bs-theme="dark"] .input-group-text {
-        background: rgba(76, 175, 80, 0.25);
-        border-color: rgba(76, 175, 80, 0.35);
-        color: #8bc34a;
-    }
-
-    /* Form help text */
     .form-text {
-        font-size: 0.85rem;
-        margin-top: 0.5rem;
-        color: var(--text-light);
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    .form-row.animate-in .form-text {
-        animation: fadeIn 0.5s ease-out 0.5s forwards;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-top: 0.25rem;
     }
 
     [data-bs-theme="dark"] .form-text {
-        color: #9e9e9e;
+        color: #9E9E9E;
+    }
+    
+    .input-group {
+        border-radius: 8px;
     }
 
-    /* Buttons */
-    .button-container {
-        opacity: 0;
-        transform: translateY(30px);
+    .input-group-text {
+        background-color: var(--accent-green);
+        border: 1px solid var(--accent-green);
+        color: var(--text-light);
+    }
+    
+    [data-bs-theme="dark"] .input-group-text {
+        background-color: var(--dark-green);
+        border-color: var(--dark-green);
     }
 
-    .button-container.animate-in {
-        animation: slideUpFadeIn 0.6s ease-out 0.6s forwards;
-    }
-
+    /* --- Buttons --- */
     .btn-submit {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
         border: none;
         border-radius: 50px;
+        color: var(--text-light);
         font-weight: 600;
-        padding: 1rem 2.5rem;
-        font-size: 1.1rem;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3);
-        color: white;
-        opacity: 0;
-        transform: scale(0.95);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .button-container.animate-in .btn-submit {
-        animation: scaleIn 0.5s ease-out 0.2s forwards;
-    }
-
-    .btn-submit::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: 0.6s;
-    }
-
-    .btn-submit:hover::before {
-        left: 100%;
+        padding: 0.875rem 2.5rem;
+        font-size: 1rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
     }
 
     .btn-submit:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+        color: var(--text-light);
     }
-
-    .btn-submit:active {
-        transform: translateY(1px) scale(0.98);
-    }
-
+    
     .btn-outline {
         border-radius: 50px;
         font-weight: 600;
-        padding: 1rem 2.5rem;
-        font-size: 1.1rem;
-        transition: all 0.3s ease;
-        border: 2px solid var(--primary-light);
-        color: var(--primary);
+        padding: 0.875rem 2.5rem;
+        font-size: 1rem;
+        border: 2px solid var(--primary-green);
+        color: var(--primary-green);
         background: transparent;
-        opacity: 0;
-        transform: scale(0.95);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .button-container.animate-in .btn-outline {
-        animation: scaleIn 0.5s ease-out 0.4s forwards;
+        transition: all 0.2s;
     }
 
     .btn-outline:hover {
-        transform: translateY(-3px) scale(1.02);
-        background: rgba(76, 175, 80, 0.1);
-        box-shadow: 0 8px 20px rgba(76, 175, 80, 0.15);
+        background-color: var(--primary-green);
+        color: var(--text-light);
+        transform: translateY(-3px);
     }
 
-    /* Help card */
+    /* --- Help Section --- */
+    .help-section {
+        margin-top: 4rem;
+    }
+    
     .help-card {
-        background: var(--card-bg);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: none;
-        border-radius: 24px;
-        overflow: hidden;
-        box-shadow: var(--card-shadow);
-        transition: all 0.4s ease;
-        opacity: 0;
-        transform: translateY(30px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .help-card.animate-in {
-        animation: slideUpFadeIn 0.8s ease-out 0.2s forwards;
+        background: var(--card-bg-light);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--shadow-light);
     }
 
     [data-bs-theme="dark"] .help-card {
-        background: rgba(30, 30, 30, 0.85);
-        border-color: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-    }
-
-    .help-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .help-card .card-body {
-        padding: 2rem;
+        background: var(--card-bg-dark);
+        border-color: var(--border-color-dark);
+        box-shadow: var(--shadow-strong);
     }
 
     .help-card h5 {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
         text-align: center;
-        color: var(--primary);
-        position: relative;
-        display: inline-block;
-        width: 100%;
-    }
-
-    .help-card h5::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, var(--primary), var(--primary-light));
-        border-radius: 3px;
+        font-weight: 700;
+        color: var(--primary-green);
+        margin-bottom: 2rem;
+        font-size: 1.5rem;
     }
 
     .help-item {
-        opacity: 0;
-        transform: translateY(30px);
         text-align: center;
         padding: 1.5rem;
-        transition: all 0.3s ease;
-        border-radius: 16px;
+        border-radius: 12px;
+        transition: background-color 0.3s, transform 0.3s;
     }
 
     .help-item:hover {
-        background: rgba(76, 175, 80, 0.05);
+        background-color: rgba(46, 125, 50, 0.05);
         transform: translateY(-5px);
     }
-
-    .help-card.animate-in .help-item:nth-child(1) {
-        animation: slideUpFadeIn 0.6s ease-out 0.4s forwards;
-    }
-
-    .help-card.animate-in .help-item:nth-child(2) {
-        animation: slideUpFadeIn 0.6s ease-out 0.6s forwards;
-    }
-
-    .help-card.animate-in .help-item:nth-child(3) {
-        animation: slideUpFadeIn 0.6s ease-out 0.8s forwards;
+    
+    [data-bs-theme="dark"] .help-item:hover {
+        background-color: rgba(255, 255, 255, 0.05);
     }
 
     .help-icon {
-        font-size: 3rem;
-        margin-bottom: 1.25rem;
-        transition: all 0.3s ease;
-        display: inline-block;
-        opacity: 0;
-        transform: scale(0.5);
-        background: rgba(76, 175, 80, 0.1);
-        width: 80px;
-        height: 80px;
-        line-height: 80px;
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+        color: var(--text-light);
         border-radius: 50%;
-        text-align: center;
-    }
-
-    .help-item.animate-in .help-icon {
-        animation: scaleIn 0.6s ease-out 0.2s forwards;
-    }
-
-    .help-item:hover .help-icon {
-        transform: scale(1.1) rotate(5deg);
-        background: rgba(76, 175, 80, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        margin: 0 auto 1rem;
     }
 
     .help-title {
         font-weight: 600;
-        margin-bottom: 1rem;
-        color: var(--text-dark);
         font-size: 1.1rem;
-        opacity: 0;
-        transform: translateX(-20px);
+        margin-bottom: 0.75rem;
+        color: var(--text-primary);
     }
 
     [data-bs-theme="dark"] .help-title {
-        color: #f0f0f0;
-    }
-
-    .help-item.animate-in .help-title {
-        animation: slideInLeft 0.5s ease-out 0.4s forwards;
+        color: #F0F0F0;
     }
 
     .help-text {
-        font-size: 0.95rem;
-        color: var(--text-light);
+        font-size: 0.9rem;
+        color: var(--text-secondary);
         line-height: 1.6;
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    .help-item.animate-in .help-text {
-        animation: fadeInUp 0.5s ease-out 0.6s forwards;
     }
 
     [data-bs-theme="dark"] .help-text {
-        color: #b0b0b0;
+        color: #BDBDBD;
     }
 
-    /* Alert messages */
+    /* --- Alert Messages --- */
     .alert {
-        border-radius: 12px;
+        border-radius: 8px;
         border: none;
-        padding: 1rem 1.5rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        animation: slideInRight 0.5s ease-out;
-        position: relative;
-        overflow: hidden;
     }
 
-    .alert::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 6px;
-        height: 100%;
-        background-color: currentColor;
-    }
-
-    /* Animations */
-    @keyframes slideInRight {
-        from {
-            opacity: 0;
-            transform: translateX(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    @keyframes slideUpFadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes fadeInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes scaleIn {
-        from {
-            opacity: 0;
-            transform: scale(0.95);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    @keyframes expandWidth {
-        from { width: 0; }
-        to { width: 100%; }
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 992px) {
-        .recommendation-container {
-            padding: 2rem 0;
-        }
-        
-        .card-header {
-            padding: 1.5rem;
-        }
-        
-        .card-header h3 {
-            font-size: 1.75rem;
-        }
-        
-        .btn-submit, .btn-outline {
-            padding: 0.875rem 2rem;
-            font-size: 1rem;
-        }
-    }
-
+    /* --- Responsive Adjustments --- */
     @media (max-width: 768px) {
-        .recommendation-card, .help-card {
-            border-radius: 20px;
+        .card-header h3 {
+            font-size: 1.8rem;
         }
-        
-        .card-body {
-            padding: 1.5rem;
-        }
-        
-        .help-item {
-            padding: 1rem;
-        }
-        
         .btn-submit, .btn-outline {
             width: 100%;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
-        
         .button-container {
             flex-direction: column;
-            gap: 0.75rem;
         }
-    }
-
-    @media (max-width: 576px) {
-        .card-header h3 {
-            font-size: 1.5rem;
-        }
-        
-        .card-header p {
-            font-size: 1rem;
-        }
-        
-        .section-header h5 {
-            font-size: 1.1rem;
-        }
-        
-        .form-control, .form-select {
-            padding: 0.75rem 1rem;
+        .help-item {
+            margin-bottom: 1.5rem;
         }
     }
 </style>
@@ -708,11 +319,9 @@
 
 {% block content %}
 <div class="recommendation-container">
-    <!-- Animated background particles -->
-    <div class="particles" id="particles"></div>
-    
     <div class="row justify-content-center">
-        <div class="col-lg-9 col-xl-8">
+        <div class="col-lg-10 col-xl-8">
+            <!-- Main Recommendation Form Card -->
             <div class="recommendation-card">
                 <div class="card-header">
                     <h3>🌾 Smart Crop Advisor</h3>
@@ -721,7 +330,7 @@
                 <div class="card-body p-4 p-md-5">
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
                                 {{ message }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
@@ -733,136 +342,85 @@
                         {{ form.non_field_errors }}
                         
                         <!-- Soil Information Section -->
-                        <div class="section-header mt-4">
-                            <h5 class="text-success"><i class="fas fa-seedling me-2"></i>Soil Information</h5>
-                            <hr class="text-success">
+                        <div class="section-header text-success">
+                            <h5><i class="fas fa-seedling"></i>Soil Information</h5>
                         </div>
-                        
-                        <div class="form-row">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="{{ form.soil_texture.id_for_label }}" class="form-label">
-                                        <i class="fas fa-mountain me-2"></i>{{ form.soil_texture.label }}
-                                    </label>
-                                    {{ form.soil_texture }}
-                                    {% if form.soil_texture.help_text %}
-                                        <div class="form-text">{{ form.soil_texture.help_text }}</div>
-                                    {% endif %}
-                                    {% if form.soil_texture.errors %}
-                                        <div class="text-danger small mt-1">{{ form.soil_texture.errors|striptags }}</div>
-                                    {% endif %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.soil_texture.id_for_label }}" class="form-label">{{ form.soil_texture.label }}</label>
+                                {{ form.soil_texture }}
+                                {% if form.soil_texture.help_text %}<div class="form-text">{{ form.soil_texture.help_text }}</div>{% endif %}
+                                {% for error in form.soil_texture.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.soil_ph.id_for_label }}" class="form-label">{{ form.soil_ph.label }}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-flask"></i></span>
+                                    {{ form.soil_ph }}
+                                    <span class="input-group-text">pH</span>
                                 </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="{{ form.soil_ph.id_for_label }}" class="form-label">
-                                        <i class="fas fa-balance-scale me-2"></i>{{ form.soil_ph.label }}
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-flask"></i></span>
-                                        {{ form.soil_ph }}
-                                        <span class="input-group-text">pH</span>
-                                    </div>
-                                    <div class="form-text">Ideal range: 6.0-7.5 for most crops</div>
-                                    {% if form.soil_ph.errors %}
-                                        <div class="text-danger small mt-1">{{ form.soil_ph.errors|striptags }}</div>
-                                    {% endif %}
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="{{ form.organic_matter.id_for_label }}" class="form-label">
-                                        <i class="fas fa-leaf me-2"></i>{{ form.organic_matter.label }}
-                                    </label>
-                                    {{ form.organic_matter }}
-                                    {% if form.organic_matter.errors %}
-                                        <div class="text-danger small mt-1">{{ form.organic_matter.errors|striptags }}</div>
-                                    {% endif %}
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="{{ form.drainage_status.id_for_label }}" class="form-label">
-                                        <i class="fas fa-tint me-2"></i>{{ form.drainage_status.label }}
-                                    </label>
-                                    {{ form.drainage_status }}
-                                    {% if form.drainage_status.errors %}
-                                        <div class="text-danger small mt-1">{{ form.drainage_status.errors|striptags }}</div>
-                                    {% endif %}
-                                </div>
+                                <div class="form-text">Ideal range: 6.0-7.5 for most crops</div>
+                                {% for error in form.soil_ph.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.organic_matter.id_for_label }}" class="form-label">{{ form.organic_matter.label }}</label>
+                                {{ form.organic_matter }}
+                                {% for error in form.organic_matter.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.drainage_status.id_for_label }}" class="form-label">{{ form.drainage_status.label }}</label>
+                                {{ form.drainage_status }}
+                                {% for error in form.drainage_status.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                             </div>
                         </div>
                         
                         <!-- Climate Information Section -->
-                        <div class="section-header mt-5">
-                            <h5 class="text-info"><i class="fas fa-cloud-sun me-2"></i>Climate Information</h5>
-                            <hr class="text-info">
+                        <div class="section-header text-info">
+                            <h5><i class="fas fa-cloud-sun"></i>Climate Information</h5>
                         </div>
-                        
-                        <div class="form-row">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="{{ form.rainfall_mm.id_for_label }}" class="form-label">
-                                        <i class="fas fa-cloud-rain me-2"></i>{{ form.rainfall_mm.label }}
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-umbrella"></i></span>
-                                        {{ form.rainfall_mm }}
-                                        <span class="input-group-text">mm/year</span>
-                                    </div>
-                                    <div class="form-text">Average annual rainfall in your region</div>
-                                    {% if form.rainfall_mm.errors %}
-                                        <div class="text-danger small mt-1">{{ form.rainfall_mm.errors|striptags }}</div>
-                                    {% endif %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.rainfall_mm.id_for_label }}" class="form-label">{{ form.rainfall_mm.label }}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-umbrella"></i></span>
+                                    {{ form.rainfall_mm }}
+                                    <span class="input-group-text">mm/year</span>
                                 </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="{{ form.avg_temperature.id_for_label }}" class="form-label">
-                                        <i class="fas fa-temperature-high me-2"></i>{{ form.avg_temperature.label }}
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-thermometer-half"></i></span>
-                                        {{ form.avg_temperature }}
-                                        <span class="input-group-text">°C</span>
-                                    </div>
-                                    <div class="form-text">Average temperature during growing season</div>
-                                    {% if form.avg_temperature.errors %}
-                                        <div class="text-danger small mt-1">{{ form.avg_temperature.errors|striptags }}</div>
-                                    {% endif %}
+                                <div class="form-text">Average annual rainfall in your region</div>
+                                {% for error in form.rainfall_mm.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.avg_temperature.id_for_label }}" class="form-label">{{ form.avg_temperature.label }}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-thermometer-half"></i></span>
+                                    {{ form.avg_temperature }}
+                                    <span class="input-group-text">°C</span>
                                 </div>
+                                <div class="form-text">Average temperature during growing season</div>
+                                {% for error in form.avg_temperature.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                             </div>
                         </div>
                         
                         <!-- Crop Planning Section -->
-                        <div class="section-header mt-5">
-                            <h5 class="text-warning"><i class="fas fa-calendar-alt me-2"></i>Crop Planning</h5>
-                            <hr class="text-warning">
+                        <div class="section-header text-warning">
+                            <h5><i class="fas fa-calendar-alt"></i>Crop Planning</h5>
                         </div>
-                        
-                        <div class="form-row">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="{{ form.season.id_for_label }}" class="form-label">
-                                        <i class="fas fa-sun me-2"></i>{{ form.season.label }}
-                                    </label>
-                                    {{ form.season }}
-                                    {% if form.season.errors %}
-                                        <div class="text-danger small mt-1">{{ form.season.errors|striptags }}</div>
-                                    {% endif %}
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="{{ form.previous_crop.id_for_label }}" class="form-label">
-                                        <i class="fas fa-history me-2"></i>{{ form.previous_crop.label }}
-                                    </label>
-                                    {{ form.previous_crop }}
-                                    <div class="form-text">Helps with crop rotation recommendations</div>
-                                    {% if form.previous_crop.errors %}
-                                        <div class="text-danger small mt-1">{{ form.previous_crop.errors|striptags }}</div>
-                                    {% endif %}
-                                </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.season.id_for_label }}" class="form-label">{{ form.season.label }}</label>
+                                {{ form.season }}
+                                {% for error in form.season.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.previous_crop.id_for_label }}" class="form-label">{{ form.previous_crop.label }}</label>
+                                {{ form.previous_crop }}
+                                <div class="form-text">Helps with crop rotation recommendations</div>
+                                {% for error in form.previous_crop.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                             </div>
                         </div>
                         
                         <!-- Submit Button -->
-                        <div class="button-container d-flex justify-content-center gap-4 mt-5">
+                        <div class="button-container d-flex justify-content-center gap-3 mt-5">
                             <button type="submit" class="btn btn-submit" id="submitBtn">
                                 <span class="spinner-border spinner-border-sm me-2 d-none" id="submitSpinner"></span>
                                 <i class="fas fa-search me-2"></i> Get Recommendations
@@ -878,14 +436,14 @@
     </div>
     
     <!-- Help Section -->
-    <div class="row justify-content-center mt-5">
-        <div class="col-lg-9 col-xl-8">
+    <div class="row justify-content-center help-section">
+        <div class="col-lg-10 col-xl-8">
             <div class="help-card">
-                <div class="card-body">
-                    <h5 class="mb-4">💡 Farming Tips & Guidance</h5>
-                    <div class="row">
-                        <div class="col-md-4 help-item">
-                            <div class="help-icon text-success">
+                <h5>💡 Farming Tips & Guidance</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="help-item">
+                            <div class="help-icon">
                                 <i class="fas fa-seedling"></i>
                             </div>
                             <h6 class="help-title">Soil Health</h6>
@@ -896,9 +454,10 @@
                                 • Rotate crops to prevent depletion
                             </div>
                         </div>
-                        
-                        <div class="col-md-4 help-item">
-                            <div class="help-icon text-info">
+                    </div>
+                    <div class="col-md-4">
+                        <div class="help-item">
+                            <div class="help-icon">
                                 <i class="fas fa-cloud-rain"></i>
                             </div>
                             <h6 class="help-title">Water Management</h6>
@@ -909,9 +468,10 @@
                                 • Schedule watering early morning
                             </div>
                         </div>
-                        
-                        <div class="col-md-4 help-item">
-                            <div class="help-icon text-warning">
+                    </div>
+                    <div class="col-md-4">
+                        <div class="help-item">
+                            <div class="help-icon">
                                 <i class="fas fa-calendar-check"></i>
                             </div>
                             <h6 class="help-title">Seasonal Planning</h6>
@@ -930,107 +490,16 @@
 </div>
 
 <script>
-    // Create animated background particles
-    function createParticles() {
-        const particlesContainer = document.getElementById('particles');
-        const particleCount = window.innerWidth < 768 ? 15 : 30;
-        
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            
-            // Random size between 5px and 15px
-            const size = Math.random() * 10 + 5;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            
-            // Random position
-            particle.style.left = `${Math.random() * 100}%`;
-            particle.style.top = `${Math.random() * 100}%`;
-            
-            // Random opacity
-            particle.style.opacity = Math.random() * 0.5 + 0.1;
-            
-            // Random animation duration
-            const duration = Math.random() * 10 + 10;
-            particle.style.animationDuration = `${duration}s`;
-            
-            // Random delay
-            particle.style.animationDelay = `${Math.random() * 5}s`;
-            
-            particlesContainer.appendChild(particle);
-        }
-    }
-    
     // Add loading state to form submission
-    document.getElementById('cropRecommendationForm').addEventListener('submit', function() {
+    document.getElementById('cropRecommendationForm')?.addEventListener('submit', function() {
         const submitBtn = document.getElementById('submitBtn');
         const spinner = document.getElementById('submitSpinner');
         
-        submitBtn.disabled = true;
-        spinner.classList.remove('d-none');
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Analyzing Your Farm Data...';
-    });
-    
-    // Add form validation feedback
-    const form = document.getElementById('cropRecommendationForm');
-    const inputs = form.querySelectorAll('input, select');
-    
-    inputs.forEach(input => {
-        input.addEventListener('blur', function() {
-            if (this.checkValidity()) {
-                this.classList.add('is-valid');
-                this.classList.remove('is-invalid');
-            } else {
-                this.classList.add('is-invalid');
-                this.classList.remove('is-invalid');
-            }
-        });
-    });
-    
-    // Scroll animations
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    
-    // Observe all elements that should animate
-    document.addEventListener('DOMContentLoaded', function() {
-        createParticles();
-        
-        // Main card
-        const mainCard = document.querySelector('.recommendation-card');
-        if (mainCard) observer.observe(mainCard);
-        
-        // Section headers
-        const sectionHeaders = document.querySelectorAll('.section-header');
-        sectionHeaders.forEach(header => observer.observe(header));
-        
-        // Form rows
-        const formRows = document.querySelectorAll('.form-row');
-        formRows.forEach(row => observer.observe(row));
-        
-        // Button container
-        const buttonContainer = document.querySelector('.button-container');
-        if (buttonContainer) observer.observe(buttonContainer);
-        
-        // Help card
-        const helpCard = document.querySelector('.help-card');
-        if (helpCard) observer.observe(helpCard);
-        
-        // Help items
-        const helpItems = document.querySelectorAll('.help-item');
-        helpItems.forEach(item => observer.observe(item));
+        if (submitBtn && spinner) {
+            submitBtn.disabled = true;
+            spinner.classList.remove('d-none');
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Analyzing Your Farm Data...';
+        }
     });
 </script>
 {% endblock %}

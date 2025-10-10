@@ -1,0 +1,101 @@
+crop_name,soil_texture,soil_ph_min,soil_ph_max,organic_matter,drainage_status,rainfall_min,rainfall_max,temperature_min,temperature_max
+Crop1,Loamy,6.0,7.5,Medium,Well Drained,300,900,10,25
+Crop2,Clayey,5.0,6.5,High,Poorly Drained,1000,2000,20,35
+Crop3,Sandy Loam,5.5,7.0,Medium,Moderately Drained,500,1000,18,30
+Crop4,Loamy,6.0,8.0,Low,Well Drained,300,800,7,24
+Crop5,Sandy,5.5,8.0,Low,Well Drained,400,1000,20,35
+Crop6,Sandy,5.0,7.0,Low,Well Drained,200,600,18,30
+Crop7,Sandy,6.0,8.5,Low,Well Drained,250,600,25,40
+Crop8,Clay Loam,6.5,7.5,High,Moderate,1000,1500,21,35
+Crop9,Black Soil,6.0,8.0,Medium,Well Drained,600,1200,20,30
+Crop10,Sandy Loam,6.0,7.0,Medium,Well Drained,500,1000,20,30
+Crop11,Loamy,6.0,7.5,Medium,Well Drained,300,900,10,25
+Crop12,Clayey,5.0,6.5,High,Poorly Drained,1000,2000,20,35
+Crop13,Sandy Loam,5.5,7.0,Medium,Moderately Drained,500,1000,18,30
+Crop14,Loamy,6.0,8.0,Low,Well Drained,300,800,7,24
+Crop15,Sandy,5.5,8.0,Low,Well Drained,400,1000,20,35
+Crop16,Sandy,5.0,7.0,Low,Well Drained,200,600,18,30
+Crop17,Sandy,6.0,8.5,Low,Well Drained,250,600,25,40
+Crop18,Clay Loam,6.5,7.5,High,Moderate,1000,1500,21,35
+Crop19,Black Soil,6.0,8.0,Medium,Well Drained,600,1200,20,30
+Crop20,Sandy Loam,6.0,7.0,Medium,Well Drained,500,1000,20,30
+Crop21,Loamy,6.0,7.5,Medium,Well Drained,300,900,10,25
+Crop22,Clayey,5.0,6.5,High,Poorly Drained,1000,2000,20,35
+Crop23,Sandy Loam,5.5,7.0,Medium,Moderately Drained,500,1000,18,30
+Crop24,Loamy,6.0,8.0,Low,Well Drained,300,800,7,24
+Crop25,Sandy,5.5,8.0,Low,Well Drained,400,1000,20,35
+Crop26,Sandy,5.0,7.0,Low,Well Drained,200,600,18,30
+Crop27,Sandy,6.0,8.5,Low,Well Drained,250,600,25,40
+Crop28,Clay Loam,6.5,7.5,High,Moderate,1000,1500,21,35
+Crop29,Black Soil,6.0,8.0,Medium,Well Drained,600,1200,20,30
+Crop30,Sandy Loam,6.0,7.0,Medium,Well Drained,500,1000,20,30
+Crop31,Loamy,6.0,7.5,Medium,Well Drained,300,900,10,25
+Crop32,Clayey,5.0,6.5,High,Poorly Drained,1000,2000,20,35
+Crop33,Sandy Loam,5.5,7.0,Medium,Moderately Drained,500,1000,18,30
+Crop34,Loamy,6.0,8.0,Low,Well Drained,300,800,7,24
+Crop35,Sandy,5.5,8.0,Low,Well Drained,400,1000,20,35
+Crop36,Sandy,5.0,7.0,Low,Well Drained,200,600,18,30
+Crop37,Sandy,6.0,8.5,Low,Well Drained,250,600,25,40
+Crop38,Clay Loam,6.5,7.5,High,Moderate,1000,1500,21,35
+Crop39,Black Soil,6.0,8.0,Medium,Well Drained,600,1200,20,30
+Crop40,Sandy Loam,6.0,7.0,Medium,Well Drained,500,1000,20,30
+Crop41,Loamy,6.0,7.5,Medium,Well Drained,300,900,10,25
+Crop42,Clayey,5.0,6.5,High,Poorly Drained,1000,2000,20,35
+Crop43,Sandy Loam,5.5,7.0,Medium,Moderately Drained,500,1000,18,30
+Crop44,Loamy,6.0,8.0,Low,Well Drained,300,800,7,24
+Crop45,Sandy,5.5,8.0,Low,Well Drained,400,1000,20,35
+Crop46,Sandy,5.0,7.0,Low,Well Drained,200,600,18,30
+Crop47,Sandy,6.0,8.5,Low,Well Drained,250,600,25,40
+Crop48,Clay Loam,6.5,7.5,High,Moderate,1000,1500,21,35
+Crop49,Black Soil,6.0,8.0,Medium,Well Drained,600,1200,20,30
+Crop50,Sandy Loam,6.0,7.0,Medium,Well Drained,500,1000,20,30
+Crop51,Loamy,6.0,7.5,Medium,Well Drained,300,900,10,25
+Crop52,Clayey,5.0,6.5,High,Poorly Drained,1000,2000,20,35
+Crop53,Sandy Loam,5.5,7.0,Medium,Moderately Drained,500,1000,18,30
+Crop54,Loamy,6.0,8.0,Low,Well Drained,300,800,7,24
+Crop55,Sandy,5.5,8.0,Low,Well Drained,400,1000,20,35
+Crop56,Sandy,5.0,7.0,Low,Well Drained,200,600,18,30
+Crop57,Sandy,6.0,8.5,Low,Well Drained,250,600,25,40
+Crop58,Clay Loam,6.5,7.5,High,Moderate,1000,1500,21,35
+Crop59,Black Soil,6.0,8.0,Medium,Well Drained,600,1200,20,30
+Crop60,Sandy Loam,6.0,7.0,Medium,Well Drained,500,1000,20,30
+Crop61,Loamy,6.0,7.5,Medium,Well Drained,300,900,10,25
+Crop62,Clayey,5.0,6.5,High,Poorly Drained,1000,2000,20,35
+Crop63,Sandy Loam,5.5,7.0,Medium,Moderately Drained,500,1000,18,30
+Crop64,Loamy,6.0,8.0,Low,Well Drained,300,800,7,24
+Crop65,Sandy,5.5,8.0,Low,Well Drained,400,1000,20,35
+Crop66,Sandy,5.0,7.0,Low,Well Drained,200,600,18,30
+Crop67,Sandy,6.0,8.5,Low,Well Drained,250,600,25,40
+Crop68,Clay Loam,6.5,7.5,High,Moderate,1000,1500,21,35
+Crop69,Black Soil,6.0,8.0,Medium,Well Drained,600,1200,20,30
+Crop70,Sandy Loam,6.0,7.0,Medium,Well Drained,500,1000,20,30
+Crop71,Loamy,6.0,7.5,Medium,Well Drained,300,900,10,25
+Crop72,Clayey,5.0,6.5,High,Poorly Drained,1000,2000,20,35
+Crop73,Sandy Loam,5.5,7.0,Medium,Moderately Drained,500,1000,18,30
+Crop74,Loamy,6.0,8.0,Low,Well Drained,300,800,7,24
+Crop75,Sandy,5.5,8.0,Low,Well Drained,400,1000,20,35
+Crop76,Sandy,5.0,7.0,Low,Well Drained,200,600,18,30
+Crop77,Sandy,6.0,8.5,Low,Well Drained,250,600,25,40
+Crop78,Clay Loam,6.5,7.5,High,Moderate,1000,1500,21,35
+Crop79,Black Soil,6.0,8.0,Medium,Well Drained,600,1200,20,30
+Crop80,Sandy Loam,6.0,7.0,Medium,Well Drained,500,1000,20,30
+Crop81,Loamy,6.0,7.5,Medium,Well Drained,300,900,10,25
+Crop82,Clayey,5.0,6.5,High,Poorly Drained,1000,2000,20,35
+Crop83,Sandy Loam,5.5,7.0,Medium,Moderately Drained,500,1000,18,30
+Crop84,Loamy,6.0,8.0,Low,Well Drained,300,800,7,24
+Crop85,Sandy,5.5,8.0,Low,Well Drained,400,1000,20,35
+Crop86,Sandy,5.0,7.0,Low,Well Drained,200,600,18,30
+Crop87,Sandy,6.0,8.5,Low,Well Drained,250,600,25,40
+Crop88,Clay Loam,6.5,7.5,High,Moderate,1000,1500,21,35
+Crop89,Black Soil,6.0,8.0,Medium,Well Drained,600,1200,20,30
+Crop90,Sandy Loam,6.0,7.0,Medium,Well Drained,500,1000,20,30
+Crop91,Loamy,6.0,7.5,Medium,Well Drained,300,900,10,25
+Crop92,Clayey,5.0,6.5,High,Poorly Drained,1000,2000,20,35
+Crop93,Sandy Loam,5.5,7.0,Medium,Moderately Drained,500,1000,18,30
+Crop94,Loamy,6.0,8.0,Low,Well Drained,300,800,7,24
+Crop95,Sandy,5.5,8.0,Low,Well Drained,400,1000,20,35
+Crop96,Sandy,5.0,7.0,Low,Well Drained,200,600,18,30
+Crop97,Sandy,6.0,8.5,Low,Well Drained,250,600,25,40
+Crop98,Clay Loam,6.5,7.5,High,Moderate,1000,1500,21,35
+Crop99,Black Soil,6.0,8.0,Medium,Well Drained,600,1200,20,30
+Crop100,Sandy Loam,6.0,7.0,Medium,Well Drained,500,1000,20,30

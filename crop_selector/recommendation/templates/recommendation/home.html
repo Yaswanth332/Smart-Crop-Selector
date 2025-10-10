@@ -9,7 +9,7 @@
     <div class="container text-center py-5 my-5" data-aos="zoom-in">
       <div class="hero-content mx-auto">
         <div class="hero-icon animate__animated animate__pulse animate__infinite animate__slow mb-4">
-          <img src="{% static 'images/wheat-icon.svg' %}" alt="Wheat Icon" width="80" height="80">
+          <img src="{% static 'images/' %}" alt="Wheat Icon" width="80" height="80">
         </div>
         <h1 class="display-3 fw-bold mb-4">Smart Farming Starts Here</h1>
         <p class="lead fs-4 mb-5">
@@ -21,7 +21,7 @@
             <a href="{% url 'recommend' %}" class="btn btn-primary btn-lg px-4 py-3 shadow">
               <i class="fas fa-seedling me-2"></i> Get Recommendations
             </a>
-            <a href="{% url 'past_recommendations' %}" class="btn btn-outline-light btn-lg px-4 py-3 shadow">
+            <a href="{% url 'past_recommendations' %}" class="btn btn-primary btn-lg px-4 py-3 shadow">
               <i class="fas fa-history me-2"></i> My Farm Log
             </a>
           {% else %}
@@ -273,38 +273,14 @@
   </div>
 </section>
 
-<!-- CTA Section -->
-<section class="py-5 bg-primary text-white">
-  <div class="container text-center">
-    <div class="row justify-content-center">
-      <div class="col-lg-8" data-aos="zoom-in">
-        <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Farming?</h2>
-        <p class="lead mb-5">
-          Join thousands of farmers who are making data-driven decisions and increasing their profits with AgriSmart.
-        </p>
-        <div class="d-flex flex-wrap justify-content-center gap-3">
-          {% if user.is_authenticated %}
-            <a href="{% url 'recommend' %}" class="btn btn-light btn-lg px-4 py-3 shadow">
-              <i class="fas fa-seedling me-2"></i> Get Recommendations
-            </a>
-          {% else %}
-            <a href="{% url 'register' %}" class="btn btn-light btn-lg px-4 py-3 shadow">
-              <i class="fas fa-user-plus me-2"></i> Sign Up Free
-            </a>
-            <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4 py-3 shadow">
-              <i class="fas fa-sign-in-alt me-2"></i> Login
-            </a>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <style>
   /* Hero Section */
   .hero-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), url("{% static 'images/farm-hero.jpg' %}") no-repeat center center;
+   background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), 
+                        url("{% static 'images/farm-bg.jpg' %}") no-repeat center center fixed;
+    background-size: cover;
+    background-attachment: fixed;
     background-size: cover;
     min-height: 90vh;
     display: flex;

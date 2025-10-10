@@ -1,0 +1,578 @@
+{% extends 'recommendation/base.html' %}
+{% block title %}{{ crop.name }} | Smart Crop Advisor{% endblock %}
+
+{% block extra_head %}
+<style>
+    :root {
+        --primary: #2e7d32;
+        --primary-light: #4caf50;
+        --primary-dark: #1b5e20;
+        --secondary: #ff9800;
+        --accent: #2196f3;
+        --text-dark: #263238;
+        --text-light: #607d8b;
+        --bg-light: #f5f7fa;
+        --bg-dark: #121212;
+        --card-bg: rgba(255, 255, 255, 0.9);
+        --card-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        --border-light: rgba(0, 0, 0, 0.1);
+        --border-dark: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Base body styling */
+    body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: var(--bg-light);
+        color: var(--text-dark);
+        background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2670&auto=format&fit=crop');
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        background-blend-mode: overlay;
+        background-color: rgba(245, 247, 250, 0.9);
+        transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    [data-bs-theme="dark"] body {
+        background-color: var(--bg-dark);
+        color: #e0e0e0;
+        background-blend-mode: overlay;
+        background-color: rgba(18, 18, 18, 0.9);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+    }
+
+    /* Main container */
+    .crop-detail-container {
+        padding: 3rem 0;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    /* Animated background particles (existing) */
+    .particles {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;
+    }
+    .particle {
+        position: absolute;
+        background-color: var(--primary-light);
+        border-radius: 50%;
+        animation: float 20s infinite linear;
+    }
+    @keyframes float {
+        0% { transform: translateY(0) translateX(0); }
+        50% { transform: translateY(-100px) translateX(20px); }
+        100% { transform: translateY(0) translateX(0); }
+    }
+
+    /* Main card styling */
+    .crop-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .crop-card.animate-in {
+        animation: slideUpFadeIn 0.8s ease-out forwards;
+    }
+    [data-bs-theme="dark"] .crop-card {
+        background: rgba(30, 30, 30, 0.9);
+        border-color: var(--border-dark);
+    }
+
+    /* Image section */
+    .crop-image-container {
+        position: relative; overflow: hidden; height: 100%; min-height: 400px;
+    }
+    .crop-image {
+        width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
+    }
+    .crop-image-container:hover .crop-image { transform: scale(1.05); }
+    .crop-image-overlay {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        padding: 2rem 1.5rem; color: white;
+    }
+    .crop-image-overlay h3 { font-size: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+    /* Content section */
+    .crop-content { padding: 2.5rem; }
+    .crop-title {
+        font-size: 2.2rem; margin-bottom: 1rem; color: var(--primary);
+    }
+
+    /* Quick Action Widgets */
+    .quick-actions {
+        display: flex;
+        gap: 1rem;
+        margin: 1.5rem 0;
+    }
+    .action-widget {
+        background: rgba(0,0,0,0.03);
+        border-radius: 50px;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .action-widget:hover {
+        background: rgba(0,0,0,0.07);
+        transform: translateY(-2px);
+        color: var(--text-dark);
+    }
+    [data-bs-theme="dark"] .action-widget {
+        background: rgba(255,255,255,0.05);
+        color: #bbb;
+    }
+    [data-bs-theme="dark"] .action-widget:hover {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+    }
+
+    /* Suitability Score & Stats Section */
+    .suitability-section { display: flex; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .suitability-score { text-align: center; }
+    .donut-chart { position: relative; width: 120px; height: 120px; }
+    .donut-chart-bg { fill: none; stroke: rgba(0,0,0,0.1); }
+    [data-bs-theme="dark"] .donut-chart-bg { stroke: rgba(255,255,255,0.1); }
+    .donut-chart-fg {
+        fill: none;
+        stroke: var(--primary);
+        stroke-linecap: round;
+        transform: rotate(-90deg);
+        transform-origin: center;
+        transition: stroke-dashoffset 1.5s ease-out;
+    }
+    .score-text {
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        font-size: 1.8rem; font-weight: 700; color: var(--primary);
+    }
+    .score-label { font-size: 0.9rem; font-weight: 600; margin-top: 0.5rem; color: var(--text-light); }
+    .crop-stats { flex: 1; min-width: 200px; }
+    .stat-item { margin-bottom: 1rem; }
+    .stat-label { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; }
+    .stat-bar { height: 8px; background: rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; }
+    [data-bs-theme="dark"] .stat-bar { background: rgba(255,255,255,0.1); }
+    .stat-progress {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, var(--primary-light), var(--primary));
+        border-radius: 4px;
+        transition: width 1.5s ease-out;
+    }
+
+    /* Growth Timeline */
+    .timeline-container { margin-top: 2rem; }
+    .timeline-title { font-size: 1.4rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--primary-dark); }
+    .growth-timeline { display: flex; background: rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden; }
+    .timeline-stage {
+        flex: 1; text-align: center; padding: 1rem 0.5rem;
+        font-weight: 600; font-size: 0.85rem; color: var(--text-light);
+        border-right: 2px solid var(--card-bg);
+        position: relative;
+    }
+    .timeline-stage:last-child { border-right: none; }
+    .timeline-stage::before {
+        content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+        width: 10px; height: 10px; border-radius: 50%; background: #ccc;
+    }
+    .timeline-stage.active { background: var(--primary-light); color: white; }
+    .timeline-stage.active::before { background: var(--primary-dark); }
+
+    /* Action buttons (Existing, slightly tweaked for neon dark mode) */
+    .action-buttons { display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .btn-action {
+        border-radius: 50px; padding: 0.75rem 1.75rem; font-weight: 600;
+        transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem;
+        border: none;
+    }
+    .btn-back { background: rgba(108, 117, 125, 0.1); color: #6c757d; }
+    .btn-back:hover { background: rgba(108, 117, 125, 0.2); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .btn-new-recommendation {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        color: white; box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+    .btn-new-recommendation:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4); }
+    [data-bs-theme="dark"] .btn-new-recommendation {
+        box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+    }
+    [data-bs-theme="dark"] .btn-new-recommendation:hover {
+        box-shadow: 0 0 25px rgba(76, 175, 80, 0.7);
+    }
+
+    /* General Card for new sections */
+    .info-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 24px;
+        box-shadow: var(--card-shadow);
+        margin-top: 2rem;
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    .info-card.animate-in {
+        animation: slideUpFadeIn 0.8s ease-out forwards;
+    }
+    [data-bs-theme="dark"] .info-card {
+        background: rgba(30, 30, 30, 0.9);
+        border-color: var(--border-dark);
+    }
+    .info-card-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        color: white; padding: 1.5rem; border-bottom: none; border-radius: 24px 24px 0 0;
+    }
+    .info-card-title { font-size: 1.4rem; margin: 0; display: flex; align-items: center; gap: 0.75rem; }
+    
+    /* Gamified Flip-Card Tips */
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 2rem; }
+    .flip-card { background-color: transparent; height: 200px; perspective: 1000px; }
+    .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+    .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+    .flip-card-front, .flip-card-back {
+        position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        padding: 1.5rem; border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+    .flip-card-front { background: white; }
+    [data-bs-theme="dark"] .flip-card-front { background: #2a2a2a; }
+    .flip-card-back {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        color: white; transform: rotateY(180deg);
+    }
+    .tip-icon { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; }
+    .tip-title-front { font-size: 1.1rem; font-weight: 600; color: var(--primary-dark); }
+    [data-bs-theme="dark"] .tip-title-front { color: #eee; }
+    
+    /* Map & Market Info */
+    .map-market-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; padding: 2rem; }
+    .map-widget img { width: 100%; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .market-info .info-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light); }
+    [data-bs-theme="dark"] .market-info .info-item { border-color: var(--border-dark); }
+    .market-info .info-item:last-child { border-bottom: none; }
+    .market-price { font-weight: 700; color: var(--primary); }
+    
+    /* Recommended Crops Carousel */
+    .recommend-carousel { display: flex; gap: 1.5rem; overflow-x: auto; padding: 2rem; scrollbar-width: thin; }
+    .recommend-carousel::-webkit-scrollbar { height: 8px; }
+    .recommend-carousel::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 4px; }
+    .crop-rec-card {
+        flex: 0 0 220px; background: white; border-radius: 16px; overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s ease;
+    }
+    .crop-rec-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+    [data-bs-theme="dark"] .crop-rec-card { background: #2a2a2a; }
+    .crop-rec-card img { width: 100%; height: 120px; object-fit: cover; }
+    .crop-rec-card-content { padding: 1rem; }
+    .crop-rec-card-content h5 { font-size: 1rem; margin-bottom: 0.25rem; }
+    .crop-rec-card-content p { font-size: 0.85rem; color: var(--text-light); }
+
+
+    /* Animations */
+    @keyframes slideUpFadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .crop-content { padding: 2rem; }
+        .crop-title { font-size: 1.8rem; }
+    }
+    @media (max-width: 768px) {
+        .crop-card { flex-direction: column; }
+        .crop-image-container { min-height: 300px; }
+        .action-buttons { flex-direction: column; gap: 0.75rem; }
+        .btn-action { width: 100%; justify-content: center; }
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="crop-detail-container">
+    <div class="particles" id="particles"></div>
+    
+    <div class="row justify-content-center">
+        <div class="col-xl-11">
+            <!-- Main Crop Card -->
+            <div class="crop-card">
+                <div class="row g-0">
+                    <div class="col-lg-5">
+                        <div class="crop-image-container">
+                            {% if crop.image %}
+                                <img src="{{ crop.image.url }}" alt="{{ crop.name }}" class="crop-image">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=500&h=500&q=80" alt="Generic Crop Image" class="crop-image">
+                            {% endif %}
+                            <div class="crop-image-overlay">
+                                <h3>{{ crop.name }}</h3>
+                                <p class="mb-0">{{ crop.season|capfirst }} Season Crop</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 d-flex flex-column">
+                        <div class="crop-content">
+                            <h1 class="crop-title">{{ crop.name }}</h1>
+                            <p class="crop-description">{{ crop.description }}</p>
+                            
+                            <!-- Quick Action Widgets -->
+                            <div class="quick-actions">
+                                <div class="action-widget"><i class="fas fa-bookmark"></i> Save Crop</div>
+                                <div class="action-widget"><i class="fas fa-share-alt"></i> Share</div>
+                                <div class="action-widget"><i class="fas fa-exchange-alt"></i> Compare</div>
+                            </div>
+                            
+                            <!-- Suitability Score & Stats -->
+                            <div class="suitability-section">
+                                <div class="suitability-score">
+                                    <svg class="donut-chart" width="120" height="120" viewBox="0 0 120 120">
+                                        <circle class="donut-chart-bg" cx="60" cy="60" r="54" stroke-width="12"></circle>
+                                        <circle id="suitability-circle" class="donut-chart-fg" cx="60" cy="60" r="54" stroke-width="12"></circle>
+                                    </svg>
+                                    <div class="score-text" id="suitability-score-text">85%</div>
+                                    <div class="score-label">Suitability</div>
+                                </div>
+                                <div class="crop-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-label"><span><i class="fas fa-flask text-info"></i> Soil pH</span> <span>{{ crop.soil_ph_min }} - {{ crop.soil_ph_max }}</span></div>
+                                        <div class="stat-bar"><div class="stat-progress" data-value="75"></div></div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label"><span><i class="fas fa-cloud-rain text-primary"></i> Rainfall (mm)</span> <span>{{ crop.rainfall_min }} - {{ crop.rainfall_max }}</span></div>
+                                        <div class="stat-bar"><div class="stat-progress" data-value="88"></div></div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label"><span><i class="fas fa-thermometer-half text-warning"></i> Temp (°C)</span> <span>{{ crop.temperature_min }} - {{ crop.temperature_max }}</span></div>
+                                        <div class="stat-bar"><div class="stat-progress" data-value="92"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="action-buttons">
+                                <a href="javascript:history.back()" class="btn-action btn-back">
+                                    <i class="fas fa-arrow-left"></i> Go Back
+                                </a>
+                                <a href="{% url 'recommend' %}" class="btn-action btn-new-recommendation">
+                                    <i class="fas fa-seedling"></i> New Recommendation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crop Growth Timeline -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-xl-11">
+             <div class="info-card">
+                 <div class="card-body p-4">
+                    <h4 class="timeline-title"><i class="fas fa-chart-line"></i> Crop Growth Timeline</h4>
+                    <div class="growth-timeline">
+                        <div class="timeline-stage active">🌱 Sowing</div>
+                        <div class="timeline-stage">🌿 Germination</div>
+                        <div class="timeline-stage">🌳 Vegetative</div>
+                        <div class="timeline-stage">🌸 Flowering</div>
+                        <div class="timeline-stage">🌾 Harvesting</div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gamified Tips Section -->
+    <div class="row justify-content-center">
+        <div class="col-xl-11">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <h4 class="info-card-title">
+                        <i class="fas fa-lightbulb"></i> Expert Growing Tips for {{ crop.name }}
+                    </h4>
+                </div>
+                <div class="tips-grid">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-seedling tip-icon"></i>
+                                <h5 class="tip-title-front">Soil Preparation</h5>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>Soil Prep</h5>
+                                <p class="small">Prepare your {{ crop.soil_texture }} soil with pH between {{ crop.soil_ph_min }}-{{ crop.soil_ph_max }}. Ensure {{ crop.organic_matter }} organic matter.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-cloud-sun tip-icon"></i>
+                                <h5 class="tip-title-front">Climate Management</h5>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>Climate</h5>
+                                <p class="small">Thrives in {{ crop.temperature_min }}-{{ crop.temperature_max }}°C with {{ crop.rainfall_min }}-{{ crop.rainfall_max }}mm rainfall. Ensure drainage is {{ crop.drainage_status }}.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-calendar-alt tip-icon"></i>
+                                <h5 class="tip-title-front">Seasonal Advice</h5>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>Season</h5>
+                                <p class="small">Best planted during {{ crop.season }} season. Ideal after {{ crop.previous_crop|default:"a suitable prior crop" }} in rotation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Region Insights & Market Info -->
+    <div class="row justify-content-center">
+        <div class="col-xl-11">
+             <div class="info-card">
+                <div class="info-card-header">
+                    <h4 class="info-card-title"><i class="fas fa-map-marked-alt"></i> Regional & Market Insights</h4>
+                </div>
+                 <div class="map-market-grid">
+                    <div class="map-widget">
+                        <h5>Top Growing Regions</h5>
+                        <img src="https://i.imgur.com/gC5Eg8V.png" alt="Map of growing regions for this crop">
+                        <button class="btn btn-primary btn-sm mt-2">Check Suitability in My Location</button>
+                    </div>
+                    <div class="market-info">
+                        <h5>Market Economics</h5>
+                        <div class="info-item"><span>Latest Market Price</span> <span class="market-price">₹2,500 /qtl</span></div>
+                        <div class="info-item"><span>Avg. Cost of Cultivation</span> <span>₹15,000 /acre</span></div>
+                        <div class="info-item"><span>Expected Yield</span> <span>10 qtl /acre</span></div>
+                        <div class="info-item"><span><strong>Estimated Profit</strong></span> <span class="market-price"><strong>₹10,000 /acre</strong></span></div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommended Crops Section -->
+    <div class="row justify-content-center">
+        <div class="col-xl-11">
+             <div class="info-card">
+                <div class="info-card-header">
+                    <h4 class="info-card-title"><i class="fas fa-thumbs-up"></i> You Might Also Like</h4>
+                </div>
+                <div class="recommend-carousel">
+                    <!-- Dummy Items, loop through actual recommendations here -->
+                    <div class="crop-rec-card">
+                        <img src="https://images.unsplash.com/photo-1598164074853-398b894d874e?auto=format&fit=crop&w=220&q=80" alt="Maize">
+                        <div class="crop-rec-card-content"><h5>Maize</h5><p>Kharif Season</p></div>
+                    </div>
+                    <div class="crop-rec-card">
+                        <img src="https://images.unsplash.com/photo-1563233269-7e2f17d3b24c?auto=format&fit=crop&w=220&q=80" alt="Soybean">
+                        <div class="crop-rec-card-content"><h5>Soybean</h5><p>Similar Soil Needs</p></div>
+                    </div>
+                    <div class="crop-rec-card">
+                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=220&q=80" alt="Wheat">
+                        <div class="crop-rec-card-content"><h5>Wheat</h5><p>Good Rotation Crop</p></div>
+                    </div>
+                    <div class="crop-rec-card">
+                        <img src="https://images.unsplash.com/photo-1518568962231-861156820bdc?auto=format&fit=crop&w=220&q=80" alt="Cotton">
+                        <div class="crop-rec-card-content"><h5>Cotton</h5><p>Thrives in Heat</p></div>
+                    </div>
+                     <div class="crop-rec-card">
+                        <img src="https://images.unsplash.com/photo-1601252323194-1a33f4432742?auto=format&fit=crop&w=220&q=80" alt="Sugarcane">
+                        <div class="crop-rec-card-content"><h5>Sugarcane</h5><p>High Water Needs</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Animated background particles ---
+    function createParticles() {
+        const particlesContainer = document.getElementById('particles');
+        if (!particlesContainer) return;
+        const particleCount = window.innerWidth < 768 ? 15 : 30;
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 10 + 5;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            particle.style.opacity = Math.random() * 0.5 + 0.1;
+            const duration = Math.random() * 20 + 15;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    // --- Intersection Observer for animations ---
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+
+                // Animate stats bars
+                const progressBars = entry.target.querySelectorAll('.stat-progress');
+                progressBars.forEach(bar => {
+                    const value = bar.getAttribute('data-value');
+                    bar.style.width = value + '%';
+                });
+
+                // Animate suitability donut chart
+                const circle = document.getElementById('suitability-circle');
+                const scoreText = document.getElementById('suitability-score-text');
+                if (circle && scoreText) {
+                    const score = parseInt(scoreText.textContent, 10);
+                    const radius = circle.r.baseVal.value;
+                    const circumference = 2 * Math.PI * radius;
+                    const offset = circumference - (score / 100) * circumference;
+                    
+                    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+                    circle.style.strokeDashoffset = circumference;
+                    // Trigger reflow to apply initial state before transition
+                    circle.getBoundingClientRect();
+                    circle.style.strokeDashoffset = offset;
+                }
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // --- Observe all elements that should animate ---
+    createParticles();
+    const elementsToAnimate = document.querySelectorAll('.crop-card, .info-card');
+    elementsToAnimate.forEach(el => {
+        if (el) observer.observe(el);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,373 @@
+<!-- login.html -->
+{% extends 'recommendation/base.html' %}
+{% block title %}Login | Crop Selector{% endblock %}
+{% block extra_head %}
+<style>
+  /* Login page specific styles */
+  .auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(139, 195, 74, 0.05) 100%);
+  }
+  
+  .auth-card {
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(
+      135deg, 
+      rgba(255, 255, 255, 0.9) 0%, 
+      rgba(248, 249, 250, 0.95) 100%
+    );
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    max-width: 420px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  [data-bs-theme="dark"] .auth-card {
+    background: linear-gradient(
+      135deg, 
+      rgba(33, 37, 41, 0.85) 0%, 
+      rgba(52, 58, 64, 0.9) 100%
+    );
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+  
+  .auth-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  }
+  
+  [data-bs-theme="dark"] .auth-card:hover {
+    box-shadow: 0 25px 50px rgba(76, 175, 80, 0.3);
+  }
+  
+  .auth-header {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(139, 195, 74, 0.1) 100%);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  [data-bs-theme="dark"] .auth-header {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(139, 195, 74, 0.2) 100%);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .auth-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .auth-icon:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 30px rgba(76, 175, 80, 0.4);
+  }
+  
+  .auth-icon i {
+    font-size: 2.5rem;
+    color: white;
+  }
+  
+  .auth-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  [data-bs-theme="dark"] .auth-title {
+    color: #fff;
+  }
+  
+  .auth-subtitle {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 0;
+  }
+  
+  [data-bs-theme="dark"] .auth-subtitle {
+    color: #ddd;
+  }
+  
+  .auth-body {
+    padding: 2rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  [data-bs-theme="dark"] .form-label {
+    color: #ddd;
+  }
+  
+  .input-group {
+    position: relative;
+  }
+  
+  .input-group-text {
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    border-right: none;
+    color: #4CAF50;
+    border-radius: 10px 0 0 10px;
+  }
+  
+  [data-bs-theme="dark"] .input-group-text {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: rgba(76, 175, 80, 0.3);
+    color: #8BC34A;
+  }
+  
+  .form-control {
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+  }
+  
+  [data-bs-theme="dark"] .form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(76, 175, 80, 0.3);
+    color: #fff;
+  }
+  
+  [data-bs-theme="dark"] .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .form-control:focus {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.2);
+  }
+  
+  [data-bs-theme="dark"] .form-control:focus {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.3);
+  }
+  
+  .auth-btn {
+    background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    padding: 0.85rem 1.5rem;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  .auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+    color: white;
+  }
+  
+  .auth-btn:active {
+    transform: translateY(1px);
+  }
+  
+  .auth-footer {
+    padding: 1.5rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(139, 195, 74, 0.05) 100%);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  [data-bs-theme="dark"] .auth-footer {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(139, 195, 74, 0.1) 100%);
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .auth-link {
+    color: #4CAF50;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .auth-link:hover {
+    color: #388E3C;
+    text-decoration: underline;
+  }
+  
+  [data-bs-theme="dark"] .auth-link {
+    color: #8BC34A;
+  }
+  
+  [data-bs-theme="dark"] .auth-link:hover {
+    color: #9CCC65;
+  }
+  
+  .alert {
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 1.5rem;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+  
+  /* Animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+  }
+  
+  /* Override base background for auth pages */
+  body {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(139, 195, 74, 0.05) 100%);
+  }
+  
+  [data-bs-theme="dark"] body {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(139, 195, 74, 0.08) 100%);
+  }
+  
+  .bg-overlay {
+    background: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .auth-card {
+      margin: 0 1rem;
+    }
+    
+    .auth-header {
+      padding: 2rem 1.5rem;
+    }
+    
+    .auth-body {
+      padding: 1.5rem;
+    }
+    
+    .auth-footer {
+      padding: 1.25rem 1.5rem;
+    }
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card animate-fade-in-up">
+    <div class="auth-header">
+      <div class="auth-icon">
+        <i class="fas fa-seedling"></i>
+      </div>
+      <h2 class="auth-title">Welcome Back</h2>
+      <p class="auth-subtitle">Sign in to your Crop Selector account</p>
+    </div>
+    
+    <div class="auth-body">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      
+      <form method="POST" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        
+        <div class="form-group">
+          <label for="username" class="form-label">Username</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fas fa-user"></i>
+            </span>
+            <input type="text" name="username" class="form-control" id="username" 
+                   placeholder="Enter your username" required
+                   value="{{ form.username.value|default:'' }}">
+          </div>
+          {% if form.username.errors %}
+            <div class="error-message">{{ form.username.errors|striptags }}</div>
+          {% endif %}
+        </div>
+        
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fas fa-lock"></i>
+            </span>
+            <input type="password" name="password" class="form-control" id="password" 
+                   placeholder="Enter your password" required>
+          </div>
+          {% if form.password.errors %}
+            <div class="error-message">{{ form.password.errors|striptags }}</div>
+          {% endif %}
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">
+              Remember me
+            </label>
+          </div>
+          <a href="#" class="auth-link">Forgot password?</a>
+        </div>
+        
+        <button type="submit" class="auth-btn">
+          Sign In
+        </button>
+      </form>
+    </div>
+    
+    <div class="auth-footer">
+      <p class="mb-0">New to Crop Selector? <a href="{% url 'register' %}" class="auth-link">Create an account</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
