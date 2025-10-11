@@ -4,178 +4,137 @@
 
 {% block extra_head %}
 <style>
-    :root {
-        --primary: #2e7d32;
-        --primary-light: #4caf50;
-        --primary-dark: #1b5e20;
-    }
-
-    body {
-        padding-bottom: 80px; /* Add padding for sticky footer */
-    }
-
-    /* --- Spotify-Inspired Card --- */
-    .crop-card {
-        transition: all 0.3s ease;
-        border: 1px solid rgba(0,0,0,0.1);
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-    .crop-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-    .card-img-container {
-        position: relative;
-    }
-    .card-img-top {
-        height: 200px;
-        object-fit: cover;
-    }
-
-    /* --- Match Score Progress Bar --- */
-    .match-score-bar {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--text-dark);
-    }
-    .progress {
-        height: 8px;
-        background-color: rgba(0,0,0,0.1);
-    }
-
-    /* --- Quick Actions --- */
-    .quick-actions-bar {
-        border-top: 1px solid rgba(0,0,0,0.1);
-        padding-top: 0.75rem;
-        margin-top: 1rem;
-    }
-    .btn-quick-action {
-        font-size: 1.1rem;
-        padding: 0.25rem 0.5rem;
-        line-height: 1;
-        color: #6c757d;
-        background: transparent;
-        border: none;
-    }
-    .btn-quick-action:hover {
-        color: var(--primary);
-    }
-
-    /* --- Collapsible Query Summary --- */
-    #query-summary-card .card-header {
-        padding: 0;
-    }
-    #query-summary-card .btn-toggle {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--primary-dark);
-        text-decoration: none;
-        width: 100%;
-        text-align: left;
-        padding: 1rem 1.25rem;
-        box-shadow: none;
-    }
-    #query-summary-card .btn-toggle:hover {
-        background-color: rgba(0,0,0,0.03);
-    }
-    #query-summary-card .btn-toggle::after {
-        content: '▲';
-        float: right;
-        transition: transform 0.3s ease;
-    }
-    #query-summary-card .btn-toggle.collapsed::after {
-        transform: rotate(180deg);
-    }
-
-    /* --- Carousel for Recommendations --- */
-    .recommend-carousel-container {
-        display: flex;
-        overflow-x: auto;
-        gap: 1.5rem;
-        padding: 1rem 0;
-        scrollbar-width: none; /* For Firefox */
-    }
-    .recommend-carousel-container::-webkit-scrollbar {
-        display: none; /* For Chrome, Safari, and Opera */
-    }
-    .crop-card-wrapper {
-        flex: 0 0 320px;
-        max-width: 320px;
-    }
-    @media (max-width: 768px) {
-        .crop-card-wrapper {
-            flex: 0 0 280px;
-            max-width: 280px;
-        }
-    }
-
-    /* --- Sticky Footer --- */
-    .sticky-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
-        display: flex;
-        justify-content: space-around;
-        padding: 0.5rem 0;
-        z-index: 1030;
-        border-top: 1px solid rgba(0,0,0,0.1);
-    }
-    .footer-link {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-decoration: none;
-        color: #6c757d;
+    /* ML Confidence Badge */
+    .ml-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
         font-size: 0.75rem;
-        font-weight: 600;
-    }
-    .footer-link i {
-        font-size: 1.25rem;
-        margin-bottom: 0.25rem;
-    }
-    .footer-link.active, .footer-link:hover {
-        color: var(--primary);
-    }
-    @media (min-width: 768px) {
-        .sticky-footer {
-            display: none; /* Hide on larger screens */
-        }
-        body {
-            padding-bottom: 0;
-        }
+        font-weight: 700;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
     }
     
-    /* --- Dark Mode Enhancements --- */
-    [data-bs-theme="dark"] .crop-card,
-    [data-bs-theme="dark"] #query-summary-card,
-    [data-bs-theme="dark"] .sticky-footer {
-        background-color: rgba(33, 37, 41, 0.85);
-        border-color: rgba(255, 255, 255, 0.20);
-        backdrop-filter: blur(10px);
+    .confidence-meter {
+        margin: 0.5rem 0;
     }
-    [data-bs-theme="dark"] .crop-card:hover {
-        box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+    
+    .confidence-bar {
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 3px;
+        overflow: hidden;
     }
-    [data-bs-theme="dark"] .btn-toggle,
-    [data-bs-theme="dark"] .card-title {
-        color: #eee;
+    
+    .confidence-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4caf50, #8bc34a);
+        transition: width 0.5s ease;
     }
-    [data-bs-theme="dark"] .quick-actions-bar {
-        border-top-color: rgba(255, 255, 255, 0.20);
+    
+    .confidence-fill.high {
+        background: linear-gradient(90deg, #4caf50, #8bc34a);
+    }
+    
+    .confidence-fill.medium {
+        background: linear-gradient(90deg, #ff9800, #ffb74d);
+    }
+    
+    .confidence-fill.low {
+        background: linear-gradient(90deg, #f44336, #ef5350);
+    }
+    
+    .ml-explanation-card {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .explanation-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .explanation-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+    
+    .crop-card {
+        position: relative;
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container py-5">
-    <!-- Collapsible Query Summary -->
+    
+    {% if ml_enabled %}
+    <!-- ML Explanation Card -->
+    <div class="ml-explanation-card">
+        <div class="explanation-header">
+            <div class="explanation-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div>
+                <h4 class="mb-1">🤖 AI-Powered Recommendations</h4>
+                <p class="mb-0 text-muted">
+                    Our machine learning model analyzed your farm conditions and recommends:
+                </p>
+            </div>
+        </div>
+        
+        {% if explanation %}
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <h6>📍 Your Conditions:</h6>
+                <ul class="list-unstyled small">
+                    <li>🏔️ Soil: {{ explanation.query_summary.soil_type|capfirst }}</li>
+                    <li>🌡️ pH: {{ explanation.query_summary.soil_ph }}</li>
+                    <li>☔ Rainfall: {{ explanation.query_summary.rainfall }}</li>
+                    <li>🌡️ Temperature: {{ explanation.query_summary.temperature }}</li>
+                    <li>📅 Season: {{ explanation.query_summary.season|capfirst }}</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h6>💡 Insights:</h6>
+                <p class="small mb-1">
+                    <strong>Top Match:</strong> {{ explanation.top_recommendation }}
+                </p>
+                <p class="small mb-1">
+                    <strong>Confidence:</strong> 
+                    <span class="badge bg-success">{{ explanation.confidence_level }}</span>
+                </p>
+                {% if explanation.alternative_crops %}
+                <p class="small mb-0">
+                    <strong>Alternatives:</strong> 
+                    {{ explanation.alternative_crops|join:", " }}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <!-- Query Summary (Collapsible) -->
     <div class="row justify-content-center">
         <div class="col-lg-10 col-xl-8">
             {% if query %}
@@ -187,7 +146,12 @@
                 </div>
                 <div id="collapseQuery" class="collapse" aria-labelledby="query-summary-header">
                     <div class="card-body">
-                        <small class="text-muted">Query from {{ query.created_at|date:"M d, Y" }} | {{ total_found }} matches found</small>
+                        <small class="text-muted">
+                            Query from {{ query.created_at|date:"M d, Y" }} | {{ total_found }} matches found
+                            {% if ml_enabled %}
+                            <span class="badge bg-primary">ML-Powered</span>
+                            {% endif %}
+                        </small>
                         <div class="row mt-2">
                             <div class="col-md-4">
                                 <strong>🌱 Field:</strong>
@@ -203,10 +167,10 @@
                                     <li>Temp: {{ query.avg_temperature }}°C</li>
                                 </ul>
                             </div>
-                             <div class="col-md-4">
+                            <div class="col-md-4">
                                 <strong>📋 Other:</strong>
                                 <ul class="list-unstyled small">
-                                     <li>Season: {{ query.season|capfirst }}</li>
+                                    <li>Season: {{ query.season|capfirst }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -217,14 +181,27 @@
         </div>
     </div>
 
-    <!-- Recommendations Carousel -->
+    <!-- Recommendations -->
     <h2 class="mb-3">
         {% if is_past_query %}Past Recommendations{% else %}Top Recommendations{% endif %}
+        {% if ml_enabled %}
+        <span class="badge bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="fas fa-brain"></i> AI
+        </span>
+        {% endif %}
     </h2>
+    
     <div class="recommend-carousel-container">
         {% for crop in crops %}
         <div class="crop-card-wrapper">
             <div class="card h-100 shadow-sm crop-card">
+                {% if ml_enabled and crop.ml_confidence %}
+                <div class="ml-badge">
+                    <i class="fas fa-robot"></i>
+                    {{ crop.ml_confidence|floatformat:1 }}%
+                </div>
+                {% endif %}
+                
                 <div class="card-img-container">
                     {% if crop.image %}
                         <img src="{{ crop.image.url }}" class="card-img-top" alt="{{ crop.name }}">
@@ -232,31 +209,61 @@
                         <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=400&h=200&q=80" class="card-img-top" alt="{{ crop.name }}">
                     {% endif %}
                 </div>
+                
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ crop.name }}</h5>
                     
-                    <!-- Match Score Progress Bar -->
-                    {% if crop.score %}
+                    {% if ml_enabled and crop.ml_confidence %}
+                    <!-- ML Confidence Meter -->
+                    <div class="confidence-meter">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <small class="text-muted">AI Confidence</small>
+                            <small class="fw-bold">{{ crop.ml_confidence|floatformat:1 }}%</small>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill {% if crop.ml_confidence >= 70 %}high{% elif crop.ml_confidence >= 40 %}medium{% else %}low{% endif %}" 
+                                 style="width: {{ crop.ml_confidence }}%">
+                            </div>
+                        </div>
+                    </div>
+                    {% elif crop.score %}
+                    <!-- Rule-based Score -->
                     <div class="match-score-bar mb-2">
                         <span>Match: {{ crop.score }}/8</span>
                         <div class="progress">
-                            <div class="progress-bar {% if crop.score >= 7 %}bg-success{% elif crop.score >= 5 %}bg-warning{% else %}bg-info{% endif %}" role="progressbar" style="width: {% widthratio crop.score 8 100 %}%" aria-valuenow="{{ crop.score }}" aria-valuemin="0" aria-valuemax="8"></div>
+                            <div class="progress-bar {% if crop.score >= 7 %}bg-success{% elif crop.score >= 5 %}bg-warning{% else %}bg-info{% endif %}" 
+                                 role="progressbar" 
+                                 style="width: {% widthratio crop.score 8 100 %}%" 
+                                 aria-valuenow="{{ crop.score }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="8">
+                            </div>
                         </div>
                     </div>
                     {% endif %}
                     
-                    <p class="card-text small text-muted flex-grow-1">{{ crop.description|truncatewords:20 }}</p>
+                    <p class="card-text small text-muted flex-grow-1">
+                        {{ crop.description|truncatewords:20 }}
+                    </p>
                     
                     <!-- Quick Actions -->
                     <div class="quick-actions-bar">
-                         <div class="d-flex justify-content-between align-items-center">
-                            <a href="{% url 'crop_detail' crop.id %}" class="btn btn-primary btn-sm flex-grow-1 me-2">View Details</a>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'crop_detail' crop.id %}" class="btn btn-primary btn-sm flex-grow-1 me-2">
+                                View Details
+                            </a>
                             <div class="d-flex">
-                                <button class="btn-quick-action" title="Save"><i class="fas fa-bookmark"></i></button>
-                                <button class="btn-quick-action" title="Compare"><i class="fas fa-exchange-alt"></i></button>
-                                <button class="btn-quick-action" title="Share"><i class="fas fa-share-alt"></i></button>
+                                <button class="btn-quick-action" title="Save">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                                <button class="btn-quick-action" title="Compare">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </button>
+                                <button class="btn-quick-action" title="Share">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
                             </div>
-                         </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -267,30 +274,38 @@
                 <h4>😔 No Perfect Matches Found</h4>
                 <p class="text-muted">Try adjusting your criteria for better results.</p>
                 <div class="mt-3">
-                     <a href="{% url 'recommend' %}" class="btn btn-success">🔄 Try Different Conditions</a>
+                    <a href="{% url 'recommend' %}" class="btn btn-success">
+                        🔄 Try Different Conditions
+                    </a>
                 </div>
-                
-                <!-- Empty State Upgrade -->
-                <h5 class="mt-5">Alternative Crop Suggestions</h5>
-                <p class="text-muted small">Consider these popular crops for your region</p>
-                <!-- Placeholder for alternative crops -->
             </div>
         </div>
         {% endfor %}
     </div>
 
-     <div class="text-center mt-5 d-none d-md-block"> <!-- Hide on mobile -->
-        <a href="{% url 'recommend' %}" class="btn btn-success">🔄 New Recommendation</a>
-        <a href="{% url 'past_recommendations' %}" class="btn btn-info">📋 View History</a>
+    <div class="text-center mt-5 d-none d-md-block">
+        <a href="{% url 'recommend' %}" class="btn btn-success">
+            🔄 New Recommendation
+        </a>
+        <a href="{% url 'past_recommendations' %}" class="btn btn-info">
+            📋 View History
+        </a>
     </div>
 </div>
 
 <!-- Sticky Footer for Mobile -->
 <nav class="sticky-footer">
-    <a href="{% url 'home' %}" class="footer-link"><i class="fas fa-home"></i> Home</a>
-    <a href="{% url 'recommend' %}" class="footer-link active"><i class="fas fa-seedling"></i> Recommend</a>
-    <a href="#" class="footer-link"><i class="fas fa-bookmark"></i> Saved</a>
-    <a href="{% url 'past_recommendations' %}" class="footer-link"><i class="fas fa-history"></i> History</a>
+    <a href="{% url 'home' %}" class="footer-link">
+        <i class="fas fa-home"></i> Home
+    </a>
+    <a href="{% url 'recommend' %}" class="footer-link active">
+        <i class="fas fa-seedling"></i> Recommend
+    </a>
+    <a href="#" class="footer-link">
+        <i class="fas fa-bookmark"></i> Saved
+    </a>
+    <a href="{% url 'past_recommendations' %}" class="footer-link">
+        <i class="fas fa-history"></i> History
+    </a>
 </nav>
 {% endblock %}
-
