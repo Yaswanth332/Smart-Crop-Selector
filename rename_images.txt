@@ -1,0 +1,63 @@
+# Image Rename Suggestions
+# Copy these commands to rename your images
+
+# Jowar (Sorghum)
+# ren "jowar.jpg" "jowar_sorghum.jpg"
+
+# Bajra (Pearl Millet)
+# ren "barnyard millet.jpeg" "bajra_pearl_millet.jpg"
+
+# Finger Millet
+# ren "finger millet.jpg" "finger_millet.jpg"
+
+# Foxtail Millet
+# ren "foxtail millet.jpg" "foxtail_millet.jpg"
+
+# Proso Millet
+# ren "proso millet.jpg" "proso_millet.jpg"
+
+# Barnyard Millet
+# ren "barnyard millet.jpeg" "barnyard_millet.jpg"
+
+# Little Millet
+# ren "little millet.jpeg" "little_millet.jpg"
+
+# Kodo Millet
+# ren "kodo millet.jpeg" "kodo_millet.jpg"
+
+# Chickpea (Chana)
+# ren "chick pea(chana).jpg" "chickpea_chana.jpg"
+
+# Pigeon Pea (Arhar)
+# ren "pigeon pea.jpg" "pigeon_pea_arhar.jpg"
+
+# Black Gram (Urad)
+# ren "black gram.jpeg" "black_gram_urad.jpg"
+
+# Green Gram (Moong)
+# ren "green gram.jpg" "green_gram_moong.jpg"
+
+# Lentil (Masur)
+# ren "lentil.jpeg" "lentil_masur.jpg"
+
+# Field Pea
+# ren "field pea.jpeg" "field_pea.jpg"
+
+# Black-eyed Pea
+# ren "black eyed pea.jpg" "black_eyed_pea.jpg"
+
+# Cowpea
+# ren "cow pea.jpg" "cowpea.jpg"
+
+# Kidney Bean
+# ren "kidney bean.jpg" "kidney_bean.jpg"
+
+# Lima Bean
+# ren "lima bean.jpg" "lima_bean.jpg"
+
+# Hyacinth Bean
+# ren "hyacinth bean.jpg" "hyacinth_bean.jpg"
+
+# Horse Gram
+# ren "horse gram.jpg" "horse_gram.jpg"
+
