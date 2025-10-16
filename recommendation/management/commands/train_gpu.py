@@ -37,7 +37,7 @@ class Command(BaseCommand):
         try:
             model, prep, accuracy = gpu_training_pipeline(
                 use_gpu=use_gpu,
-                gpu_backend=backend,
+                backend=backend,
                 n_samples=n_samples
             )
             

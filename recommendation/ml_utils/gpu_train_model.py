@@ -86,8 +86,8 @@ class GPUCropRecommendationModel:
                 print("🔧 Using XGBoost CPU mode")
             
             self.model = XGBClassifier(
-                n_estimators=300,
-                max_depth=12,
+                n_estimators=100,
+                max_depth=6,
                 learning_rate=0.1,
                 subsample=0.8,
                 colsample_bytree=0.8,
